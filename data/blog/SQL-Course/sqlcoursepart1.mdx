@@ -1,0 +1,156 @@
+---
+title: "SQL for Beginners - Chapter 1"
+summary: "An in-depth guide to understanding the basics of SQL for new learners."
+date: "Oct 28 2024"
+tags: ["SQL", "databases", "data management", "tutorial"]
+draft: false
+---
+
+**Structured Query Language** (SQL) is the backbone of modern data management and relational databases. It’s a powerful language used to interact with and manipulate databases, making it an essential skill for data scientists, software developers, and IT professionals. This guide will provide a comprehensive overview of SQL, covering the fundamental concepts, commands, and best practices needed to get started with database management.
+
+By the end of this guide, you’ll have a solid foundation in SQL and be ready to start working with relational databases confidently. Let’s dive into the world of SQL!
+
+## What is SQL?
+
+SQL, or Structured Query Language, is a programming language designed specifically for managing and manipulating databases. SQL allows users to:
+1. **Query Data**: Retrieve data from a database.
+2. **Insert Data**: Add new records to a database.
+3. **Update Data**: Modify existing records.
+4. **Delete Data**: Remove records from a database.
+5. **Create and Manage Database Objects**: Define and control database structures such as tables, indexes, and views.
+
+SQL is widely used due to its straightforward syntax and the high demand for data-driven decision-making in various industries. Most relational database management systems (RDBMS), like MySQL, PostgreSQL, SQL Server, and Oracle, support SQL.
+
+## Setting Up a Database
+Before diving into SQL commands, let’s cover the basics of setting up a database environment. To follow along, you’ll need an RDBMS software, like MySQL or PostgreSQL, installed on your computer. Many RDBMS options are free to use for learning purposes.
+
+Once installed, you can create a database and start working with SQL commands in your chosen RDBMS’s console or a graphical user interface (GUI) like MySQL Workbench, pgAdmin (for PostgreSQL), or DBeaver, which supports multiple database systems.
+
+### Creating a Database
+A database is a structured collection of data, often organized into tables. To create a database in SQL, use the following command:
+```sql
+CREATE DATABASE my_database;
+```
+This command will create a new database named my_database that you can use to store and organize data.
+
+### Choosing a Database
+After creating a database, you’ll need to select it to start working with tables and other database objects within it. Use the following command:
+```mysql
+USE my_database;
+```
+This command switches to my_database so that any subsequent commands you execute will be within this database context.
+
+## SQL Data Types
+Understanding SQL data types is crucial for defining tables and managing data accurately. SQL offers several data types for different kinds of data. Here’s a quick overview:
+1. **Integer Types**: Used for whole numbers. Common types include INT, SMALLINT, TINYINT, and BIGINT.
+2. **Floating-Point Types**: Used for numbers with decimal points. Common types include FLOAT, REAL, and DOUBLE.
+3. **String Types**: Used for text data. Common types include CHAR, VARCHAR, and TEXT.
+4. **Date and Time Types**: Used for dates and times. Common types include DATE, TIME, DATETIME, and TIMESTAMP.
+5. **Boolean Types**: Represent true/false values, commonly implemented as BOOLEAN or BIT.
+
+When defining a table, you’ll need to specify a data type for each column to ensure that the data stored in the column is valid and consistent.
+
+### Creating Tables
+Tables are the foundation of relational databases. Each table contains rows and columns, with each column representing a specific type of data (e.g., name, age, email) and each row representing a record.
+
+### Basic Table Structure
+To create a table in SQL, use the CREATE TABLE command. Here’s an example:
+
+
+```sql
+CREATE TABLE employees (
+    employee_id INT PRIMARY KEY,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    email VARCHAR(100),
+    hire_date DATE,
+    salary DECIMAL(10, 2)
+);
+```
+
+In this example, we’ve created a table named employees with the following columns:
+• employee_id: An integer that serves as the primary key for each employee, meaning it uniquely identifies each row.
+• first_name and last_name: Strings with a maximum length of 50 characters.
+• email: A string with a maximum length of 100 characters.
+• hire_date: A date representing the date an employee was hired.
+• salary: A decimal number with up to 10 digits, including 2 decimal places for the fractional part.
+
+The **PRIMARY KEY** constraint on employee_id ensures that each value in this column is unique and not null.
+
+### Inserting Data into Tables
+Once a table is created, you can start adding data to it using the INSERT INTO statement. Here’s how you can add a new employee to the employees table:
+```sql
+INSERT INTO employees (employee_id, first_name, last_name, email, hire_date, salary)
+
+VALUES (1, 'John', 'Doe', 'john.doe@example.com', '2024-01-15', 55000.00);
+```
+This command inserts a new row into the employees table with the specified values for each column.
+
+### Inserting Multiple Rows
+You can also insert multiple rows in a single command by separating each row with commas:
+```sql
+INSERT INTO employees (employee_id, first_name, last_name, email, hire_date, salary)
+
+VALUES
+ (2, 'Jane', 'Smith', 'jane.smith@example.com', '2023-10-10', 62000.00),
+
+ (3, 'Sam', 'Brown', 'sam.brown@example.com', '2024-03-25', 48000.00);
+```
+This command inserts two rows into the employees table at once.
+
+## Querying Data with SELECT
+The SELECT statement is one of the most commonly used SQL commands. It allows you to retrieve data from a table and display it in a readable format.
+
+### Basic SELECT Statement
+Here’s a simple example that retrieves all columns and rows from the employees table:
+```sql
+SELECT * FROM employees;
+```
+In this example, the * symbol selects all columns. To select specific columns, replace * with the column names:
+```sql
+SELECT first_name, last_name, email FROM employees;
+```
+
+### Filtering Data with WHERE
+To retrieve only specific rows based on certain conditions, use the WHERE clause. Here’s an example:
+```sql
+SELECT first_name, last_name, salary
+FROM employees
+WHERE salary > 50000;
+```
+This command retrieves the first name, last name, and salary of employees who earn more than $50,000.
+
+### Combining Conditions with AND and OR
+You can combine multiple conditions in a WHERE clause using the AND and OR operators:
+```sql
+SELECT first_name, last_name
+FROM employees
+WHERE salary > 50000 AND hire_date > '2023-01-01';
+```
+This command retrieves the first and last names of employees who earn more than $50,000 and were hired after January 1, 2023.
+
+**Updating Data with UPDATE**
+To modify existing data in a table, use the UPDATE statement. Here’s an example that updates the salary of an employee:
+```sql
+UPDATE employees
+SET salary = 60000
+WHERE employee_id = 1;
+```
+In this example, the UPDATE statement changes the salary of the employee with employee_id 1 to $60,000. The WHERE clause ensures that only the specified employee’s record is updated.
+
+**Updating Multiple Rows**
+You can also update multiple rows at once by omitting the WHERE clause or using conditions that match multiple rows:
+```sql
+UPDATE employees
+SET salary = salary * 1.05
+WHERE hire_date < '2023-01-01';
+```
+This command gives a 5% raise to all employees hired before January 1, 2023.
+
+**Deleting Data with DELETE**
+To remove records from a table, use the DELETE statement. Here’s an example that deletes a specific employee:
+```sql
+DELETE FROM employees
+WHERE employee_id = 3;
+```
+This command removes the row where employee_id is 3. Without a WHERE clause, the DELETE statement would remove all rows in the table, so always be careful when using this command.

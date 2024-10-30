@@ -1,0 +1,202 @@
+---
+title: "SQL for Beginners — Chapter 3"
+summary: "An in-depth guide to understanding the basics of SQL for new learners."
+date: "Oct 30 2024"
+tags: ["SQL", "databases", "data management", "tutorial"]
+draft: false
+---
+
+Welcome back to our **SQL** series! In <a href="/blog/SQL-Course/sqlcoursepart1">Chapter 1</a>, we explored the basics of SQL, and in <a href="/blog/SQL-Course/sqlcoursepart2">Chapter 2</a>, we moved into joins, aggregate functions, and grouping data. Now, in Chapter 3, we’ll dive deeper into advanced SQL concepts to help you get the most out of your databases.
+
+## Subqueries
+
+A **subquery** (also known as a nested query) is a query embedded within another SQL query. Subqueries allow you to perform complex operations by breaking them down into smaller, manageable queries. You can use them in SELECT, INSERT, UPDATE, or DELETE statements, as well as in conditional statements like WHERE and HAVING.
+
+### Basic Subquery Example
+
+Let’s say you have a table named employees and another table named departments. If you want to find the employees working in the department with the highest budget, you can use a subquery:
+
+```sql
+SELECT first_name, last_name
+FROM employees
+WHERE department_id = (
+    SELECT department_id
+    FROM departments
+    ORDER BY budget DESC
+    LIMIT 1
+);
+```
+
+Here, the **subquery** retrieves the department_id of the department with the highest budget. The main query then uses that department_id to find the employees in that department.
+
+### Types of Subqueries
+
+1.	Single-Row Subqueries: Return a single row of results (like the example above).
+2. Multi-Row Subqueries: Return multiple rows of results and often use operators like IN, ANY, or ALL.
+3. Correlated Subqueries: Depend on data from the outer query and are executed once for each row in the outer query.
+
+### Correlated Subquery Example
+
+A correlated subquery is evaluated once for each row processed by the outer query. Here’s an example that finds employees with salaries higher than the average salary in their department:
+```sql
+SELECT first_name, last_name, salary
+FROM employees e
+WHERE salary > (
+    SELECT AVG(salary)
+    FROM employees
+    WHERE department_id = e.department_id
+);
+```
+
+In this query, the subquery calculates the average salary for each department, and the outer query returns employees with salaries above that average.
+
+## Views
+
+A view is a virtual table based on the result set of a SQL query. Views are used to simplify complex queries, secure data by providing limited access to certain columns, and make queries more readable. When you query a view, SQL executes the underlying query that defines the view.
+
+### Creating a View
+
+Let’s create a view named high_earning_employees that shows employees with a salary above $70,000:
+```sql
+CREATE VIEW high_earning_employees AS
+SELECT first_name, last_name, salary, department_id
+FROM employees
+WHERE salary > 70000;
+```
+
+Now, you can query high_earning_employees like a regular table:
+```sql
+SELECT * FROM high_earning_employees;
+```
+
+### Advantages of Using Views
+
+1.	Simplified Queries: You can store complex SQL queries in views and use simple SELECT statements to retrieve data.
+2. Data Security: Views allow you to expose specific columns or rows to users, protecting sensitive information.
+3.	Data Consistency: If you frequently use the same complex query, a view ensures that all users get consistent results.
+
+### Updating Data Through Views
+
+In certain cases, you can use views to update data in the underlying tables, as long as the view doesn’t involve complex joins, aggregation, or certain types of expressions. For example:
+```sql
+UPDATE high_earning_employees
+SET salary = 75000
+WHERE first_name = 'John' AND last_name = 'Doe';
+```
+This command updates the salary column in the original employees table for the specified employee.
+
+## Indexes
+
+Indexes are used to speed up data retrieval in SQL by creating a quick lookup table for specified columns. When an index is created on a column, SQL builds a data structure that allows for faster searches, especially for large datasets. However, indexes can slow down INSERT, UPDATE, and DELETE operations, as the index needs to be updated each time the data changes.
+
+### Creating an Index
+
+To create an index on the last_name column in the employees table, you can use the following command:
+```sql
+CREATE INDEX idx_last_name ON employees(last_name);
+```
+With this index in place, queries that search for employees by last_name will run faster.
+
+### Types of Indexes
+
+1.	Single-Column Index: An index on a single column, like the example above.
+2. Composite Index: An index on multiple columns, which is useful for queries that filter by multiple fields. Example:
+```sql
+CREATE INDEX idx_last_name_first_name ON employees(last_name, first_name);
+```
+3. Unique Index: Ensures that all values in the indexed column(s) are unique.
+
+### When to Use Indexes
+
+Indexes should be used strategically. Here are some situations where indexes are beneficial:
+
+- Columns frequently used in WHERE clauses.
+- Columns used in JOIN conditions.
+- Columns that are frequently sorted or grouped.
+
+Avoid using indexes on columns with a high number of unique values (like ID columns) or on columns that are rarely queried.
+
+## Data Constraints
+
+Data constraints are rules applied to table columns to ensure data integrity and consistency. Constraints prevent invalid data from entering the database and help enforce relationships between tables.
+
+### Common Types of Constraints
+
+1. **PRIMARY KEY**: Uniquely identifies each row in a table. A table can have only one primary key, and it ensures that no duplicate or NULL values are in the specified column(s).
+```sql
+CREATE TABLE employees (
+    employee_id INT PRIMARY KEY,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50)
+);
+```
+
+2.	**FOREIGN KEY**: Establishes a link between two tables by creating a relationship between a column in one table and the primary key of another table. This ensures referential integrity.
+```sql
+CREATE TABLE orders (
+    order_id INT PRIMARY KEY,
+    employee_id INT,
+    FOREIGN KEY (employee_id) REFERENCES employees(employee_id)
+);
+```
+
+3.	**UNIQUE**: Ensures all values in a column are unique but allows one NULL value.
+```sql
+CREATE TABLE customers (
+    customer_id INT PRIMARY KEY,
+    email VARCHAR(100) UNIQUE
+);
+```
+
+4.	**NOT NULL**: Ensures that a column cannot have a NULL value.
+```sql
+CREATE TABLE products (
+    product_id INT PRIMARY KEY,
+    product_name VARCHAR(50) NOT NULL
+);
+```
+
+5.	CHECK: Limits the range of values that can be placed in a column.
+```sql
+CREATE TABLE employees (
+    employee_id INT PRIMARY KEY,
+    age INT CHECK (age >= 18)
+);
+```
+
+
+### Using Constraints Effectively
+
+Data constraints help maintain data integrity but can impact performance if overused. Here’s a quick guide on when to use constraints:
+
+- **PRIMARY KEY**: Always use a primary key to uniquely identify each row in a table.
+- **FOREIGN KEY**: Use foreign keys to maintain relationships between tables, especially in normalized databases.
+- **UNIQUE**: Use for fields like email or username, where duplicate entries would cause issues.
+- **NOT NULL**: Use on required fields to prevent incomplete data entry.
+- **CHECK**: Use for fields that must meet certain criteria, like age or salary.
+
+#### Practical Example: Creating a Database with Constraints and Indexes
+
+Let’s put all of these concepts together by creating a sample employees and departments database with constraints and an index.
+```sql
+CREATE TABLE departments (
+    department_id INT PRIMARY KEY,
+    department_name VARCHAR(50) NOT NULL UNIQUE
+);
+
+CREATE TABLE employees (
+    employee_id INT PRIMARY KEY,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    salary DECIMAL(10, 2) CHECK (salary > 0),
+    department_id INT,
+    FOREIGN KEY (department_id) REFERENCES departments(department_id)
+);
+
+CREATE INDEX idx_employee_last_name ON employees(last_name);
+```
+In this example:
+
+- _departments_ have a **PRIMARY KEY** on _department_id_ and a **UNIQUE** constraint on _department_name_.
+- _employees_ have a PRIMARY KEY on _employee_id_, a **CHECK** constraint on salary, and a **FOREIGN KEY** constraint on _department_id_ to link to the _department's_ table.
+- We've created an index _idx_employee_last_name_ on the _last_name_ column of the employee's table to speed up searches by last name.

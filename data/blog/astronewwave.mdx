@@ -1,0 +1,187 @@
+---
+title: "Astro: The new wave"
+summary: "In this post we discuss about what's Astro and why it's so popular nowadays."
+date: "Oct 4 2024"
+tags: ["astro", "javascript", "web development"]
+draft: false
+---
+
+## Introduction
+
+In today’s web development landscape, speed and efficiency are more crucial than ever. With the growing demand for optimized websites that enhance user experience various tools and frameworks have emerged to meet these needs. One of these innovators is **Astro**, a static site generator that has quickly gained the attention of developers for its unique approach and modular architecture. This article explores what Astro is, its intent, architecture, and how it can be used to create stunning websites.
+
+## What is Astro?
+
+Astro is a static site generator that allows developers to create fast and lightweight web applications. Launched in 2021, Astro is designed to deliver optimal performance by loading only the necessary JavaScript for each page, resulting in faster load times and an enhanced user experience. This tool is not only fast but also enables the integration of multiple JavaScript frameworks, such as React, Vue, and Svelte, providing developers with flexibility.
+
+### Key Features of Astro
+
+1. **Zero JavaScript on the Server**: Astro runs on the server and generates static HTML, meaning no JavaScript is necessary on the server to render content. This enhances performance and security.
+
+2. **Deferred Component Loading**: Astro loads only the necessary JavaScript for the components on the page, reducing the overall payload size and improving page speed.
+
+3. **Multi-Framework Compatibility**: Developers can use their favorite frameworks within the same project, making it easy to integrate different technologies and skills.
+
+4. **Image Optimization**: Astro includes built-in support for image optimization, ensuring that images are served in the most suitable format and size.
+
+5. **File-Based Routing System**: Astro uses a simple file-based routing system that allows developers to create static pages quickly and easily.
+
+## The Intent of Astro
+
+Astro was created with several key intents that differentiate it from other static site generators:
+
+### 1. Performance Enhancement
+
+The primary intent of Astro is to provide exceptional performance. In a world where loading speed can make or break the user experience, Astro is designed to generate sites that load quickly, optimizing both load times and file sizes.
+
+### 2. Flexibility
+
+Astro allows developers to choose and mix components from different frameworks. This not only saves time and effort but also offers the freedom to select the best tool for each task. For instance, you can use React for some components of your site while using Svelte for others.
+
+### 3. Accessibility
+
+With its focus on ease of use, Astro becomes accessible to developers of all levels, from beginners to experts. Its intuitive syntax and clear documentation make the learning curve manageable.
+
+### 4. User Experience Focus
+
+Astro aims to improve user experience by delivering faster and more responsive sites. By reducing the amount of JavaScript loaded on each page, it ensures that users enjoy a site that feels agile and responsive.
+
+## Architecture of Astro
+
+The architecture of Astro is based on a modular approach that separates content, presentation, and logic. Here are the key parts of its architecture:
+
+### 1. Project Structure
+
+A typical Astro project follows an organized file structure:
+
+```md
+my-astro-project/
+├── public/
+│   └── assets/
+├── src/
+│   ├── components/
+│   ├── layouts/
+│   ├── pages/
+│   └── styles/
+├── package.json
+└── astro.config.mjs
+```
+
+- **public/**: This folder stores all static assets, such as images and files that will be served directly.
+- **src/**: This folder contains the main content of your project, including components and pages.
+- **package.json**: Defines the dependencies and configurations for your project.
+- **astro.config.mjs**: Configuration file where project options are set.
+
+### 2. Routes and Pages
+
+Astro uses a file-based routing system where each file in the `src/pages` folder corresponds to a route on the site. For example, `src/pages/index.astro` becomes the homepage. This simplifies the process of creating new pages, as you only need to create a new file for it to be available on the site.
+
+### 3. Components
+
+Astro allows the creation of reusable components that can be used across multiple pages. These components can be built using different frameworks. For instance, a simple button component could be defined as follows:
+
+```astro
+---
+// src/components/Button.astro
+const { text, onClick } = Astro.props;
+---
+
+<button onClick={onClick}>{text}</button>
+```
+
+### 4. Framework Integrations
+
+One of the most powerful features of Astro is its ability to integrate different JavaScript frameworks. You can include components from React, Vue, Svelte, and more in the same project. To do this, you need to install the corresponding integration and configure it in astro.config.mjs. For example, to integrate React:
+
+```javascript
+    // astro.config.mjs
+    import { defineConfig } from 'astro/config';
+    import react from '@astrojs/react';
+
+    export default defineConfig({
+    integrations: [react()],
+    });
+```
+
+This flexibility allows developers to leverage their existing skills and choose the best tool for each task.
+
+## Practical Examples of Using Astro
+
+### Example 1: Creating a Static Page
+
+To create a simple static page, you need to create a file in the src/pages folder. For instance, to create an “About Me” page, you would create a file src/pages/about.astro:
+
+```astro
+    ---
+    // src/pages/about.astro
+    ---
+
+<head>
+  <title>About Me</title>
+</head>
+
+<body>
+  <h1>Welcome to My About Me Page</h1>
+  <p>This is a static page created with Astro.</p>
+</body>
+```
+
+When you build your project, Astro will automatically generate a static page at the route /about.
+
+### Example 2: Using React Components
+
+Suppose you want to use a React component in your Astro project. First, make sure to install the React integration and then create a React component in the src/components folder:
+
+```jsx
+
+// src/components/MyComponent.jsx
+import React from 'react';
+
+const MyComponent = () => {
+  return <div>Hello from a React component!</div>;
+};
+
+export default MyComponent;
+```
+
+Then, in your `src/pages/index.astro` file, you can import and use this component:
+
+```astro
+---
+// src/pages/index.astro
+import MyComponent from '../components/MyComponent.jsx';
+---
+
+<head>
+  <title>Home Page</title>
+</head>
+
+<body>
+  <h1>Welcome to My Website</h1>
+  <MyComponent />
+</body>
+```
+
+Astro will handle the loading of the component only when necessary, improving the efficiency of the page.
+
+### Example 3: Image Optimization
+
+Astro offers built-in tools for image optimization. You can use the `<Image />` syntax to load images efficiently:
+
+```astro
+---
+// src/pages/index.astro
+import { Image } from 'astro:assets';
+---
+
+<head>
+  <title>Home Page</title>
+</head>
+
+<body>
+  <h1>Welcome to My Website</h1>
+  <Image src="/assets/my-image.jpg" alt="Description of the image" />
+</body>
+```
+
+This ensures that your image is automatically optimized for the appropriate size and format, further improving page load speed.

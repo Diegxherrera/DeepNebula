@@ -1,0 +1,166 @@
+---
+title: "SQL for Beginners - Chapter 2"
+summary: "An in-depth guide to understanding the basics of SQL for new learners."
+date: "Oct 29 2024"
+tags: ["SQL", "databases", "data management", "tutorial"]
+draft: false
+---
+
+Welcome back to our SQL series! In <a href="/blog/SQL-Course/sqlcoursepart1">Chapter 1</a>, we covered the basics of SQL, including creating databases, inserting and querying data, and performing basic updates and deletions. Now, in Part Two, we’ll move beyond the basics and explore **joins**, **aggregate functions**, and **grouping data** to expand your skill set. By the end of this article, you’ll be able to handle more complex queries and make meaningful analyses from relational data. Let’s dive in!
+
+## Joining Tables in SQL
+Real-world databases are rarely confined to a single table. Instead, they contain multiple tables with related data, which must often be combined to get meaningful insights. **Joins** are essential for this purpose, allowing you to connect data across tables based on a common field.
+
+### Understanding Joins
+Joins are used to retrieve records from two or more tables in a relational database based on a specified condition. Here’s a quick overview of common join types:
+1. **INNER JOIN**: Returns records that have matching values in both tables.
+2. **LEFT JOIN (LEFT OUTER JOIN)**: Returns all records from the left table and matched records from the right table. If there’s no match, NULL values are returned for the right table.
+3. **RIGHT JOIN (RIGHT OUTER JOIN)**: Returns all records from the right table and matched records from the left table. If there’s no match, NULL values are returned for the left table.
+4. **FULL JOIN (FULL OUTER JOIN)**: Returns all records when there is a match in either left or right table. Rows with no match in one of the tables will have NULL in the corresponding columns.
+
+Let’s go through each of these join types in more detail.
+
+**1. INNER JOIN**
+An **INNER JOIN** retrieves only the rows where there is a match between both tables. Here’s an example:
+
+Suppose you have two tables:
+• employees (contains employee details)
+• departments (contains department information)
+```sql
+SELECT employees.first_name, employees.last_name, departments.department_name
+
+FROM employees
+
+INNER JOIN departments ON employees.department_id = departments.department_id;
+```
+
+In this example, the query retrieves the first name, last name, and department name of each employee, but only for those who are assigned to a department.
+
+**2. LEFT JOIN (or LEFT OUTER JOIN)**
+A **LEFT JOIN** returns all rows from the left table (in this case, employees), and the matched rows from the right table (departments). If there’s no match, the result is NULL for columns from the right table.
+```sql
+SELECT employees.first_name, employees.last_name, departments.department_name
+
+FROM employees
+
+LEFT JOIN departments ON employees.department_id = departments.department_id;
+```
+
+This query includes all employees, even those not assigned to any department. For employees without a department, the department_name column will show NULL.
+
+**3. RIGHT JOIN (or RIGHT OUTER JOIN)**
+A **RIGHT JOIN** works similarly to a LEFT JOIN but in the opposite direction. It returns all records from the right table and matched records from the left table. If there’s no match, NULL values are filled in for columns from the left table.
+```sql
+SELECT employees.first_name, employees.last_name, departments.department_name
+
+FROM employees
+
+RIGHT JOIN departments ON employees.department_id = departments.department_id;
+```
+
+This query includes all departments, even if they don’t have any employees assigned. For departments with no employees, the first_name and last_name columns will show NULL.
+
+**4. FULL JOIN (or FULL OUTER JOIN)**
+A **FULL JOIN** returns all rows when there is a match in either left or right table. Rows with no match in one of the tables will have NULL in the corresponding columns.
+```sql
+SELECT employees.first_name, employees.last_name, departments.department_name
+
+FROM employees
+
+FULL JOIN departments ON employees.department_id = departments.department_id;
+```
+
+This query returns all employees and departments, showing NULL where there is no match.
+
+### Aggregate Functions
+Aggregate functions allow you to perform calculations on multiple rows of data and return a single result. They are commonly used for generating summaries and statistical insights from large datasets. Here are some of the most widely used aggregate functions:
+1. **COUNT()**: Returns the number of rows that match a specified condition.
+2. **SUM()**: Adds up the values in a specified column.
+3. **AVG()**: Calculates the average value in a specified column.
+4. **MIN()**: Finds the smallest value in a specified column.
+5. **MAX()**: Finds the largest value in a specified column.
+
+**Example Usage of Aggregate Functions**
+Suppose we have a table named sales with the following columns:
+• sale_id: Unique identifier for each sale
+• amount: The amount of money from each sale
+• sale_date: The date of each sale
+
+**COUNT()**
+To find out the total number of sales, use the COUNT() function:
+```sql
+SELECT COUNT(*) AS total_sales
+FROM sales;
+```
+
+**SUM()**
+To calculate the total sales amount, use the SUM() function:
+```sql
+SELECT SUM(amount) AS total_sales_amount
+FROM sales;
+```
+
+**AVG()**
+To find the average sales amount, use the AVG() function:
+```sql
+SELECT AVG(amount) AS average_sale_amount
+FROM sales;
+```
+
+**MIN() and MAX()**
+To find the smallest and largest sales amounts, use the MIN() and MAX() functions:
+```sql
+SELECT MIN(amount) AS smallest_sale, MAX(amount) AS largest_sale
+FROM sales;
+```
+
+### Grouping Data with GROUP BY
+The **GROUP BY** clause is used to group rows that have the same values in specified columns into aggregated data. It’s typically used with aggregate functions to perform calculations for each group.
+
+**Example of GROUP BY**
+Suppose you want to find the total sales amount for each day. Here’s how you can use GROUP BY with the sales table:
+```sql
+SELECT sale_date, SUM(amount) AS daily_total
+FROM sales
+GROUP BY sale_date;
+```
+
+This query groups the sales by date, calculating the total sales amount for each day.
+
+**HAVING Clause**
+The **HAVING** clause is similar to WHERE, but it’s used with aggregate functions in conjunction with GROUP BY. Use HAVING to filter groups based on the results of aggregate functions.
+
+For instance, if you want to find days with total sales exceeding $1000:
+```sql
+SELECT sale_date, SUM(amount) AS daily_total
+FROM sales
+GROUP BY sale_date
+HAVING SUM(amount) > 1000;
+```
+
+This query groups sales by date and only includes dates where the total sales amount exceeds $1000.
+
+**Combining Data: UNION and UNION ALL**
+The **UNION** operator is used to combine the results of two or more SELECT statements into a single result set. Each SELECT statement within a UNION must have the same number of columns, and the columns must have compatible data types.
+
+**UNION**
+The UNION operator removes duplicate records by default. Here’s an example:
+```sql
+SELECT first_name, last_name FROM employees
+UNION
+SELECT first_name, last_name FROM contractors;
+```
+
+This query retrieves a list of unique first and last names from both the employees and contractors tables.
+
+**UNION ALL**
+If you want to include duplicates, use UNION ALL:
+```sql
+SELECT first_name, last_name FROM employees
+UNION ALL
+SELECT first_name, last_name FROM contractors;
+```
+
+This query includes all rows from both tables, including duplicates.
+
+With this second part of the SQL guide, you now have the tools to handle data across multiple tables, aggregate and summarize data, and combine results from multiple queries. These skills are essential for working with relational databases and deriving insights from data.
