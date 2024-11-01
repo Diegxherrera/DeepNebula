@@ -3,7 +3,8 @@ const siteMetadata = {
   title: 'NebuDev',
   author: 'Diego Herrera Redondo',
   headerTitle: 'Nebula Developers',
-  description: 'Development blog for other developers to learn',
+  description:
+    'Empowering Your Journey with Knowledge, Insights, and Tools for a Smarter Tomorrow.',
   language: 'en-us',
   theme: 'system', // system, dark or light
   siteUrl: 'https://deepnebula.vercel.app',
@@ -14,7 +15,7 @@ const siteMetadata = {
   github: 'https://github.com/diegxherrera',
   x: 'https://twitter.com/diegxherrera',
   linkedin: 'https://www.linkedin.com/in/diegxherrera',
-  medium: 'https://medium.com',
+  medium: 'https://medium.com/@diegxherrera',
   locale: 'en-US',
   // set to true if you want a navbar fixed to the top
   stickyNav: false,

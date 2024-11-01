@@ -1,0 +1,70 @@
+---
+title: "Why integrating Next.js and NestJS?"
+summary: "In this article we discuss combining these two frameworks to develop a web application."
+date: "Sept 24 2024"
+tags: ["nextjs", "nestjs", "javascript", "web development"]
+draft: false
+---
+
+**Next.js** is a React framework that enables server-side rendering (SSR) and
+static site generation (SSG) for web applications. Developed by Vercel, it builds on top of React,
+allowing developers to create highly performant, SEO-optimized, and scalable applications.
+
+While, **NestJS** is a framework for building efficient,
+scalable, and maintainable server-side applications.
+It is built with Node.js and TypeScript,
+following a modular architecture that makes it ideal for developing robust backend applications.
+
+## Advantages
+
+Integrating these two technologies offers a wide variety of options
+for
+
+### 1. Modular Architecture with NestJS
+
+NestJS has truly revolutionized how we structure the backend.
+One of its standout features is its modular architecture,
+which promotes cleaner, more scalable, and maintainable codebases.
+With NestJS, every feature can be encapsulated in its own module,
+making it incredibly easy to add, modify, or remove components without disrupting the rest of the system.
+
+Moreover, its tight integration with TypeScript allows for strong typing,
+giving developers confidence in the stability and reliability of their code.
+The use of decorators is also a game-changer, simplifying tasks like dependency injection and request validation.
+
+### 2. Server-Side Rendering (SSR) with NextJS
+
+On the frontend, we chose Next.js for its robust server-side rendering (SSR) capabilities.
+SSR plays a crucial role in improving both performance and SEO. By rendering pages on the server,
+we drastically reduced the time it takes for users to see content, which significantly improves the user experience.
+Additionally, search engines can crawl our pages more efficiently, boosting the SEO of the application.
+
+Next.js also made it simple to implement dynamic routing,
+which allowed us to serve content based on user interaction or data-driven routes.
+This flexibility enhanced the overall interactivity of the application.
+
+### 3. Simplified Deployment
+
+Deploying this kind of application was easier than expected.
+We plan to use **Vercel** for the Next.js frontend and **Heroku** for the NestJS backend.
+Both platforms provide a smooth CI/CD pipeline and allow for rapid,
+worry-free deployments. Vercel’s seamless integration with Next.js makes it a natural choice,
+while Heroku offers great flexibility for handling the backend, including built-in scalability features.
+
+## Best Practices and Pro Tips
+
+If you’re considering using NestJS and Next.js together, here are a few recommendations to make the most out of these technologies:
+
+- **Custom Decorators in NestJS**: Leverage the power of custom decorators in NestJS to handle validation and business logic. This helps in keeping the codebase clean, DRY, and reusable.
+- **Dynamic Pages in NextJS**: Make use of dynamic routes in Next.js to serve content based on user interaction or external data. This not only enhances the user experience but also makes your frontend highly adaptable.
+- **Shared Types**: If you’re using TypeScript (which I highly recommend), you can share types between your NestJS backend and Next.js frontend. This avoids duplication and ensures consistency across your application.
+
+## Challenges and Lessons Learned
+
+As with any project, integrating two powerful technologies like NestJS and Next.js comes with its challenges. One major challenge was ensuring seamless communication between the backend and frontend. Given that they run on different platforms (Vercel for frontend, Heroku for backend), we needed to handle CORS policies carefully, especially when dealing with API requests.
+
+Another lesson learned was optimizing the load times for dynamic pages. Even though SSR improves the initial load time, rendering dynamic content on the server requires careful caching strategies to prevent performance bottlenecks.
+
+## Conclusion
+
+Working with NestJS and Next.js has been an enriching experience. Both frameworks complement each other beautifully, allowing us to build scalable, performant, and SEO-friendly applications with ease. The modular architecture of NestJS, combined with the dynamic routing and SSR capabilities of Next.js, creates a potent combination for modern web development.

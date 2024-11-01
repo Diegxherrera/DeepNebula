@@ -1,0 +1,124 @@
+---
+title: "Refactoring"
+summary: "In this post we talk about what refactoring is and how to do it effectively along with some other."
+date: 'Oct 30 2023'
+tags: ['java', 'best practices']
+draft: false
+---
+
+Refactoring refers to the process of restructuring the code of a program without changing its external behavior.
+In other words, it's like reorganizing a book to make it easier to read without altering its story.
+This practice is based on the concept that clean and well-organized code is essential for long-term maintenance,
+which exponentially reduces problems when working in a team.
+
+### Key Principles
+
+Before diving into how I experienced this process, it's important to recall some key principles:
+
+1. **Meaningful Names**: Variable, method, and class names should be descriptive and meaningful so that anyone can understand their purpose.
+2. **Small Functions**: Functions should be short and perform a single task. If a function does too many things, it becomes difficult to understand and maintain.
+3. **DRY (Don't Repeat Yourself)**: Avoid code duplication. Instead of copying and pasting, create reusable functions.
+4. **Meaningful Comments**: If necessary, use comments to explain the _why_ and not the _what_. The code itself should be as self-explanatory as possible.
+5. **Structure and Organization**: Code should be well-structured and organized, following naming conventions and design patterns.
+6. **Avoid Encoding**: Creating encoded names only burdens new developers who need to modify or understand your code.
+
+This example shows common errors when principles are not taken into account:
+
+```java
+public class logger {
+ private static logger log = null;
+
+ public static logger getLogger() {
+     if (log == null) {
+         log = new logger();
+     }
+     return log;
+ }
+
+ public void write(String s) {
+     System.out.println(s);
+ }
+}
+   ```
+
+This example applies all the key principles and makes the code more readable.
+
+```java
+public class Logger {
+ // Volatile keyword ensures visibility of changes across threads
+ private static volatile Logger instance = null;
+
+ // Private constructor to prevent instantiation
+ private Logger() {}
+
+ public static Logger getInstance() {
+     if (instance == null) {
+         synchronized (Logger.class) {
+             if (instance == null) {
+                 instance = new Logger();
+             }
+         }
+     }
+     return instance;
+ }
+
+ public void logMessage(String message) {
+     System.out.println(getCurrentTimestamp() + " - " + message);
+ }
+
+ private String getCurrentTimestamp() {
+     return java.time.LocalDateTime.now().toString();
+ }
+}
+   ```
+
+## The Refactoring Process
+
+To address these issues, I decided to apply the "Clean Code" principles and begin refactoring. Here is the process I followed:
+
+### Phase 1: Splitting Functions
+
+The first task was to split the long functions into smaller, more specific tasks. This made the code much more understandable and allowed for better organization.
+
+### Phase 2: Meaningful Names
+
+I reviewed and changed the names of variables and functions to be more descriptive. This improved code readability and made its functionality easier to understand.
+
+### Phase 3: Removing Duplication
+
+I looked for duplicated code snippets and replaced them with reusable functions.
+This reduced redundancy and decreased the code size. Additionally,
+it allowed the developers I worked with
+to find the most important functions much faster without getting lost among many code fragments.
+
+### Phase 4: Meaningful Comments
+
+Where necessary, I added comments that explained the purpose of code sections. These comments focused on _why_ behind the code, which helped any developer working on the project understand the intention behind each piece of code.
+
+## Refactoring Results
+
+Refactoring had a significant impact on the project. The code became cleaner, more readable, and easier to maintain. Additionally, the following benefits were achieved:
+
+1. **Ease of Maintenance**
+
+The code became much easier to maintain and update. Developers could address issues and add new features more quickly and confidently.
+
+2. **Error Reduction**
+
+Splitting functions and removing duplication reduced the likelihood of errors. Changes made in one part of the code did not inadvertently affect other parts.
+
+3. **Improved Collaboration**
+
+The clarity and organization of the code facilitated collaboration among the development team. Team members could quickly understand each other's work and contribute more effectively.
+
+4. **Optimized Performance**
+
+Refactoring also allowed for the identification and correction of inefficiencies in the original code. This improved the program's performance.
+
+## Conclusion
+
+Refactoring in programming is essential for maintaining efficient, readable, and easy-to-maintain code. My experience with the projects "Un Monde Sans Danger" and "Sorting Hat" highlights the importance of this practice, which is so widespread among the developer community.
+
+This practice not only improved code quality but also facilitated collaboration, reduced errors, and optimized performance. This experience has taught me the importance of writing clean code from the beginning and embracing refactoring as a powerful tool to enhance the quality of our work.
+
+In summary, refactoring in programming is not just a useful practice; it is a necessity. As I advance in my programming career, I will continue to apply these principles to create more efficient and sustainable software while extending its longevity.

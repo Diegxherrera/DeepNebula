@@ -1,0 +1,114 @@
+---
+title: "What are Sockets?: A guide"
+summary: "In this article we discuss how sockets work in modern networks.
+          Giving some examples in the programming language C."
+date: "Oct 1 2024"
+tags: ["C", "sockets", "networking"]
+draft: false
+---
+
+## Introduction
+
+In the vast world of computing, one of the most valued skills is the ability to understand and work with networks. Networking is the core of modern connectivity, and sockets are one of the pillars upon which this connectivity is built. In this post, we will explore what sockets are, focusing on the C programming language and computer science in general, how they work, and we’ll provide a practical example of how to use them for simple communication.
+
+## What is a socket?
+
+A socket is an abstraction that allows communication between devices over a network. It can be imagined as an endpoint for communication between two machines. A socket can be used to exchange data between different processes within the same machine or between processes on separate machines connected via a network such as the Internet.
+
+To illustrate with a metaphor, a socket is like an electrical plug. Just as a plug connects a device to the electrical current, a socket connects a process to the network. This process can be any program that wants to send or receive data, such as a web server responding to page requests or a messaging app.
+
+## Types of Sockets
+
+In computing, there are mainly two types of sockets:
+
+1. **Stream Sockets**: Based on the TCP (Transmission Control Protocol), they are used for reliable, connection-oriented communication. TCP ensures that data arrives in the correct order and without errors, which is essential for applications like the web or file transfer.
+2. **Datagram Sockets**: Based on the UDP (User Datagram Protocol), they are used for unreliable communication that does not require a pre-established connection. These sockets are useful in applications where speed is more important than reliability, such as online games or real-time video streaming.
+
+## How do Sockets Work?
+
+A socket, when created, is associated with a type of network protocol, which can be TCP or UDP. Then, the socket must be bound to a specific network address (such as an IP address) and a port, which is simply a number indicating a particular service at that address.
+
+To explain the basic operation of sockets, it is useful to see how a typical communication unfolds:
+
+1. **Server**:
+- The server creates a socket.
+- The socket is bound to a specific IP address and port number.
+- The server puts the socket in a listening state, waiting for clients to attempt to connect.
+- When a client attempts to connect, the server accepts the connection and creates a new socket dedicated exclusively to that connection.
+- Data is exchanged between the server and the client through the socket.
+2. **Client**:
+- The client also creates a socket.
+- The client uses the socket to connect to the IP address and port where the server is listening.
+- Once the connection is established, the client can send and receive data from the server.
+
+The lifecycle of a socket includes the following stages:
+- Creation of the socket.
+- Binding to an address and port.
+- Listening (in the case of a server) or connecting (in the case of a client).
+- Sending and receiving data.
+- Closing the socket.
+
+## Sockets in C
+
+C is one of the most widely used languages for system-level programming, and working with sockets in C requires a deep understanding of libraries and the operating system. The standard C library provides a series of functions and data structures that allow working with sockets.
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <arpa/inet.h>
+
+int main() {
+    // Create a socket
+    int sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    if (sockfd < 0) {
+        perror("Error creating socket");
+        exit(1);
+    }
+
+    // Specify the server address
+    struct sockaddr_in serv_addr;
+    memset(&serv_addr, 0, sizeof(serv_addr));
+    serv_addr.sin_family = AF_INET;
+    serv_addr.sin_port = htons(8080);
+    serv_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
+
+    // Connect to the server
+    if (connect(sockfd, (struct sockaddr*)&serv_addr, sizeof(serv_addr)) < 0) {
+        perror("Connection error");
+        close(sockfd);
+        exit(1);
+    }
+
+    printf("Connection established\n");
+
+    // Send and receive data (this is a simple example)
+    char *message = "Hello, server";
+    send(sockfd, message, strlen(message), 0);
+
+    char buffer[1024] = {0};
+    read(sockfd, buffer, sizeof(buffer));
+    printf("Server response: %s\n", buffer);
+
+    // Close the socket
+    close(sockfd);
+    return 0;
+}
+```
+
+This code represents a simple client that connects to a server on the same machine (127.0.0.1) on port 8080. After establishing the connection, the client sends a message to the server and then receives a response.
+
+## Code Explanation
+- **socket()**: This function creates a new socket. The address type (AF_INET for IPv4 addresses), the socket type (SOCK_STREAM for TCP), and the protocol (0 to let the system choose the default protocol for the socket type) are specified.
+- **struct sockaddr_in**: This structure contains the address and port of the server to which the client wants to connect.
+- **connect()**: This function establishes a connection with the server.
+- **send()** and **read()**: These are used to send and receive data over the socket.
+- **close()**: Closes the socket when it is no longer needed.
+
+## Challenges to Overcome
+Despite the benefits, there are also some challenges associated with socket programming in C:
+
+1. **Complexity**: Network programming can be complex, especially when it comes to handling multiple connections, errors, and edge conditions.
+2. **Security**: Sockets can be vulnerable to attacks if not handled properly, so it is essential to consider security when developing network applications.
+3. **Debugging**: Debugging network applications can be difficult because errors are not always easy to reproduce.
