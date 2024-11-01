@@ -1,13 +1,13 @@
 /** @type {import("pliny/config").PlinyConfig } */
 const siteMetadata = {
-  title: 'NebuDev',
+  title: 'Deep Nebula',
   author: 'Diego Herrera Redondo',
-  headerTitle: 'Nebula Developers',
+  headerTitle: 'Deep Nebula',
   description:
     'Empowering Your Journey with Knowledge, Insights, and Tools for a Smarter Tomorrow.',
   language: 'en-us',
   theme: 'system', // system, dark or light
-  siteUrl: 'https://deepnebula.vercel.app',
+  siteUrl: 'https://deepnebula.dev',
   siteRepo: 'https://github.com/diegxherrera/DeepNebula',
   siteLogo: `/static/images/logo.svg`,
   socialBanner: `${process.env.BASE_PATH || ''}/static/images/twitter-card.png`,
@@ -18,7 +18,7 @@ const siteMetadata = {
   medium: 'https://medium.com/@diegxherrera',
   locale: 'en-US',
   // set to true if you want a navbar fixed to the top
-  stickyNav: false,
+  stickyNav: true,
   analytics: {
     // If you want to use an analytics provider you have to add it to the
     // content security policy in the `next.config.js` file.
