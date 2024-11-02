@@ -48,10 +48,11 @@ The lifecycle of a socket includes the following stages:
 - Sending and receiving data.
 - Closing the socket.
 
-## Sockets in C
+## Sockets in C & Rust
 
 C is one of the most widely used languages for system-level programming, and working with sockets in C requires a deep understanding of libraries and the operating system. The standard C library provides a series of functions and data structures that allow working with sockets.
 
+**C source code**
 ```c
 #include <stdio.h>
 #include <stdlib.h>
@@ -97,14 +98,57 @@ int main() {
 }
 ```
 
-This code represents a simple client that connects to a server on the same machine (127.0.0.1) on port 8080. After establishing the connection, the client sends a message to the server and then receives a response.
-
-## Code Explanation
+### C Code Explanation
 - **socket()**: This function creates a new socket. The address type (AF_INET for IPv4 addresses), the socket type (SOCK_STREAM for TCP), and the protocol (0 to let the system choose the default protocol for the socket type) are specified.
 - **struct sockaddr_in**: This structure contains the address and port of the server to which the client wants to connect.
 - **connect()**: This function establishes a connection with the server.
 - **send()** and **read()**: These are used to send and receive data over the socket.
 - **close()**: Closes the socket when it is no longer needed.
+
+**Rust source code**
+```rust
+use std::io::{Read, Write};
+use std::net::TcpStream;
+
+fn main() {
+    // Specify the server address and port
+    let server_address = "127.0.0.1:8080";
+
+    // Connect to the server
+    match TcpStream::connect(server_address) {
+        Ok(mut stream) => {
+            println!("Connection established");
+
+            // Send data to the server
+            let message = "Hello, server";
+            stream.write_all(message.as_bytes()).expect("Failed to send data");
+
+            // Receive data from the server
+            let mut buffer = [0; 1024];
+            match stream.read(&mut buffer) {
+                Ok(bytes_read) => {
+                    let response = String::from_utf8_lossy(&buffer[..bytes_read]);
+                    println!("Server response: {}", response);
+                }
+                Err(e) => {
+                    eprintln!("Failed to receive data: {}", e);
+                }
+            }
+        }
+        Err(e) => {
+            eprintln!("Connection error: {}", e);
+        }
+    }
+}
+```
+
+### Rust Code Explanation
+- **TcpStream::connect()**: This is the equivalent of the socket() and connect() functions in C. It both creates a new TCP connection and attempts to connect to the server. The connect function takes the server’s address and port in a single &str format (e.g., "127.0.0.1:8080").
+- **Server Address Specification**: In Rust, the server address is specified as a string, such as "127.0.0.1:8080". Rust’s standard library will parse this into an IP address and port format compatible with the underlying network system.
+- **Sending Data (write_all())**: In C, send() is used to write data to a socket. In Rust, the write_all() method on a TcpStream does the same thing. It sends all bytes in the provided buffer to the connected server.
+- **Receiving Data (read())**: The equivalent of the read() function in C for sockets, TcpStream::read() in Rust reads data from the stream into a buffer. It returns the number of bytes read, which allows you to extract the received data from the buffer accurately.
+- **Closing the Connection**: In Rust, when the TcpStream goes out of scope, it is automatically closed because Rust’s ownership model automatically cleans up resources when they are no longer in use.
+
 
 ## Challenges to Overcome
 Despite the benefits, there are also some challenges associated with socket programming in C:
