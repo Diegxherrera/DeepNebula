@@ -1,0 +1,10 @@
+{
+  "javascript-deep-dive": {
+    "count": 3,
+    "title": "JavaScript Deep Dive"
+  },
+  "javascript-crash-course": {
+    "count": 10,
+    "title": "JavaScript Crash Course"
+  }
+}

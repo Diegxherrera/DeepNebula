@@ -3,10 +3,16 @@ import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
 import { formatDate } from 'pliny/utils/formatDate'
 import NewsletterForm from 'pliny/ui/NewsletterForm'
+import { allCoreContent, sortPosts } from 'pliny/utils/contentlayer.js'
+import { allBlogs } from 'contentlayer/generated'
 
 const MAX_DISPLAY = 5
 
-export default function Home({ posts }) {
+export default function Home() {
+  const posts = allCoreContent(
+    sortPosts(allBlogs.filter((post) => post.course === undefined)) // Explicitly check for undefined course
+  )
+
   return (
     <>
       <div className="divide-y divide-gray-200 dark:divide-gray-700">
