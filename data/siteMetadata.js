@@ -4,7 +4,7 @@ const siteMetadata = {
   author: 'Diego Herrera Redondo',
   headerTitle: 'Deep Nebula',
   description:
-    'Empowering Your Journey with Knowledge, Insights, and Tools for a Smarter Tomorrow.',
+    'Empowering Your Development Journey with Code, Insights, and Tools for Building a Smarter Future.',
   language: 'en-us',
   theme: 'system', // system, dark or light
   siteUrl: 'https://deepnebula.dev',

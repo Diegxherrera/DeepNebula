@@ -67,11 +67,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${space_grotesk.variable} scroll-smooth`}
       suppressHydrationWarning
     >
-      <link rel="apple-touch-icon" href={`${basePath}/static/favicons/Nebula_logo.svg`} />
-      <link rel="icon" type="image/svg" href={`${basePath}/static/favicons/Nebula_logo.svg`} />
-      <link rel="icon" href={`${basePath}/static/favicons/Nebula_logo.svg`} />
+      <link rel="apple-touch-icon" href={`${basePath}/static/favicons/favicon.ico`} />
+      <link rel="icon" href={`${basePath}/static/favicons/favicon.ico`} />
       <link rel="manifest" href={`${basePath}/static/favicons/site.webmanifest`} />
-      <link rel="mask-icon" href={`${basePath}/static/favicons/Nebula_logo.svg`} color="#5bbad5" />
+      <link rel="mask-icon" href={`${basePath}/static/favicons/favicon.ico`} />
       <meta name="msapplication-TileColor" content="#000000" />
       <meta name="theme-color" media="(prefers-color-scheme: light)" content="#fff" />
       <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000" />
