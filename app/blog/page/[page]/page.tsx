@@ -21,9 +21,13 @@ export default async function Page({ params }: { params: { page: string } }) {
     POSTS_PER_PAGE * pageNumber
   )
 
+  // Determine if this page is displaying course-related content
+  const isCoursePage = false // Set to `true` if this is a course page; here it's `false` for the blog page
+
   const pagination = {
     currentPage: pageNumber,
     totalPages: Math.ceil(posts.length / POSTS_PER_PAGE),
+    isCoursePage, // Add `isCoursePage` property to pagination
   }
 
   return (
