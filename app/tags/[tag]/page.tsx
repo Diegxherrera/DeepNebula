@@ -9,15 +9,20 @@ import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
 // Separate function to decode the tag and process the title
-async function getTag(tagParam: string) {
+function getTag(tagParam: string) {
   const tag = decodeURI(tagParam)
   const title = tag[0].toUpperCase() + tag.split(' ').join('-').slice(1)
   return { tag, title }
 }
 
 // Generate metadata with async handling
-export async function generateMetadata({ params }: { params: { tag: string } }): Promise<Metadata> {
-  const { tag } = await getTag(params.tag)
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ tag: string }>
+}): Promise<Metadata> {
+  const resolvedParams = await params // Await `params` here for async access
+  const { tag } = getTag(resolvedParams.tag)
   return genPageMetadata({
     title: tag,
     description: `${siteMetadata.title} ${tag} tagged content`,
@@ -40,16 +45,13 @@ export const generateStaticParams = async () => {
 }
 
 // Main TagPage component
-export default async function TagPage({ params }: { params: { tag: string } }) {
-  const { tag, title } = await getTag(params.tag)
+export default async function TagPage({ params }: { params: Promise<{ tag: string }> }) {
+  const resolvedParams = await params // Await `params` here for async access
+  const { tag, title } = getTag(resolvedParams.tag)
 
   // Filter posts based on the tag, excluding those with a course defined
   const filteredPosts = allCoreContent(
-    sortPosts(
-      allBlogs.filter(
-        (post) => post.tags && post.tags.map((t) => slug(t)).includes(tag) && !post.course
-      )
-    )
+    sortPosts(allBlogs.filter((post) => post.tags && post.tags.map((t) => slug(t)).includes(tag)))
   )
 
   if (filteredPosts.length === 0) {

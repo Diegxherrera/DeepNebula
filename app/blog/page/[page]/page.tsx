@@ -7,8 +7,11 @@ const POSTS_PER_PAGE = 5
 
 export const metadata = genPageMetadata({ title: 'Blog' })
 
-export default async function Page({ params }: { params: { page: string } }) {
-  const pageNumber = parseInt(params.page as string)
+// Modify Page function to await params
+export default async function Page({ params }: Awaited<{ params: Promise<{ page: string }> }>) {
+  const resolvedParams = await params // Await the params Promise
+
+  const pageNumber = parseInt(resolvedParams.page)
 
   // Filter posts to exclude any that have a `course` field defined
   const filteredPosts = allBlogs.filter((post) => !post.course)

@@ -27,7 +27,7 @@ export default function Footer() {
         </div>
         <div className="mb-8 text-sm text-gray-500 dark:text-gray-400">
           <Link href="https://github.com/timlrx/tailwind-nextjs-starter-blog">
-            Desde Cádiz para el mundo
+            Desde España para el mundo
           </Link>
         </div>
       </div>

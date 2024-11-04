@@ -4,7 +4,7 @@ summary: "In Part 2 of our JavaScript Crash Course, we dive into control structu
 date: "Nov 6 2024"
 tags: ["javascript", "web development", "control structures", "loops"]
 course: "JavaScript Crash Course"
-draft: true
+draft: false
 ---
 
 Welcome back to our **JavaScript Crash Course** series! 🎉 In Part 1, we covered the basics like variables, data types, and simple operations. Now, in Part 2, we’re diving into **control structures**: conditionals and loops. These tools allow us to make decisions in code and repeat tasks, which is essential for dynamic and interactive applications. Let’s get started! 🚀
@@ -183,4 +183,187 @@ In this part, we covered some of the most powerful tools in JavaScript: **condit
 
 Stay tuned for Part 3, where we’ll explore **functions** and **scopes** in JavaScript! Thanks for reading, and happy coding! 🎉
 
+------
+title: "Part 2: Control Structures and Loops"
+summary: "In Part 2 of our JavaScript Crash Course, we dive into control structures like conditionals and loops, essential tools for creating dynamic, interactive applications."
+date: "Nov 6 2024"
+tags: ["javascript", "web development", "control structures", "loops"]
+course: "JavaScript Crash Course"
+draft: true
 ---
+
+Welcome back to our **JavaScript Crash Course** series! 🎉 In Part 1, we covered the basics like variables, data types, and simple operations. Now, in Part 2, we’re diving into **control structures**: conditionals and loops. These tools allow us to make decisions in code and repeat tasks, which is essential for dynamic and interactive applications. Let’s get started! 🚀
+
+## Making Decisions: Conditionals 🌐
+
+In programming, we often need to make decisions based on certain conditions. **Conditionals** let us do just that. In JavaScript, we use `if`, `else if`, and `else` statements to perform different actions depending on whether conditions are true or false.
+
+### Basic Syntax for Conditionals
+
+```javascript
+let age = 18;
+
+if (age >= 18) {
+    console.log("You are eligible to vote!");
+} else {
+    console.log("You are not eligible to vote.");
+}
+```
+
+### `else if` for Multiple Conditions
+
+If you have more than one condition to check, you can use `else if`:
+
+```javascript
+let score = 85;
+
+if (score >= 90) {
+    console.log("You got an A!");
+} else if (score >= 80) {
+    console.log("You got a B!");
+} else if (score >= 70) {
+    console.log("You got a C.");
+} else {
+    console.log("You need to study more.");
+}
+```
+
+### `switch` Statements
+
+When you have multiple conditions based on a single variable, a `switch` statement can be cleaner than multiple `if-else` statements:
+
+```javascript
+let day = "Monday";
+
+switch (day) {
+    case "Monday":
+        console.log("Start of the work week!");
+        break;
+    case "Friday":
+        console.log("TGIF!");
+        break;
+    case "Saturday":
+    case "Sunday":
+        console.log("It's the weekend!");
+        break;
+    default:
+        console.log("Just another day.");
+}
+```
+
+The `break` statement stops the execution from falling through to the next case. If you want multiple cases to lead to the same result (like "Saturday" and "Sunday"), you can stack them without a `break`.
+
+---
+
+## Repeating Actions: Loops 🔄
+
+Loops let us repeat actions without writing out each action manually. JavaScript offers a few types of loops to choose from, and each has its best use case.
+
+### `for` Loop
+
+The `for` loop is great when you know how many times you need to repeat something.
+
+```javascript
+for (let i = 1; i <= 5; i++) {
+    console.log("Count:", i);
+}
+```
+
+This loop will print numbers 1 through 5. The syntax is:
+
+1. Initialize a variable (`let i = 1`).
+2. Set a condition (`i <= 5`)—the loop runs while this is true.
+3. Increment or change the variable (`i++`).
+
+### `while` Loop
+
+The `while` loop is useful when you don’t know the exact number of iterations beforehand.
+
+```javascript
+let count = 1;
+
+while (count <= 5) {
+    console.log("While count:", count);
+    count++;
+}
+```
+
+In this example, the loop will keep running until `count` is greater than 5.
+
+### `do...while` Loop
+
+The `do...while` loop is similar to the `while` loop, but it always executes **at least once** because the condition is checked after the code runs.
+
+```javascript
+let number = 1;
+
+do {
+    console.log("Do count:", number);
+    number++;
+} while (number <= 5);
+```
+
+### Breaking Out of Loops
+
+You can use `break` to exit a loop early:
+
+```javascript
+for (let i = 1; i <= 10; i++) {
+    if (i === 5) {
+        break;
+    }
+    console.log(i);
+}
+```
+
+This will print numbers 1 to 4 and stop when `i` reaches 5.
+
+### Skipping Iterations with `continue`
+
+The `continue` statement skips the current iteration and moves to the next one:
+
+```javascript
+for (let i = 1; i <= 5; i++) {
+    if (i === 3) {
+        continue; // Skip when i is 3
+    }
+    console.log(i);
+}
+```
+
+This will print `1, 2, 4, 5`, skipping 3.
+
+---
+
+## Practice Challenge: FizzBuzz 🎲
+
+Let’s try a popular programming challenge to practice loops and conditionals: **FizzBuzz**!
+
+1. Write a loop that prints numbers from 1 to 20.
+2. For multiples of 3, print "Fizz" instead of the number.
+3. For multiples of 5, print "Buzz" instead of the number.
+4. For numbers that are multiples of both 3 and 5, print "FizzBuzz".
+
+Example Solution:
+
+```javascript
+for (let i = 1; i <= 20; i++) {
+    if (i % 3 === 0 && i % 5 === 0) {
+        console.log("FizzBuzz");
+    } else if (i % 3 === 0) {
+        console.log("Fizz");
+    } else if (i % 5 === 0) {
+        console.log("Buzz");
+    } else {
+        console.log(i);
+    }
+}
+```
+
+---
+
+## Wrapping Up
+
+In this part, we covered some of the most powerful tools in JavaScript: **conditionals** and **loops**. With these, you can control the flow of your code, make decisions, and repeat actions as needed. These basics will serve as a foundation for more complex programs.
+
+Stay tuned for Part 3, where we’ll explore **functions** and **scopes** in JavaScript! Thanks for reading, and happy coding! 🎉

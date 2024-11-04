@@ -18,9 +18,12 @@ export default function BlogPage() {
     POSTS_PER_PAGE * (pageNumber - 1),
     POSTS_PER_PAGE * pageNumber
   )
+
+  // Updated pagination object with isCoursePage property
   const pagination = {
     currentPage: pageNumber,
     totalPages: Math.ceil(filteredPosts.length / POSTS_PER_PAGE),
+    isCoursePage: false, // Explicitly set isCoursePage to false
   }
 
   return (

@@ -1,7 +1,6 @@
 import 'css/prism.css'
 import 'katex/dist/katex.css'
 
-import PageTitle from '@/components/PageTitle'
 import { components } from '@/components/MDXComponents'
 import { MDXLayoutRenderer } from 'pliny/mdx-components'
 import { sortPosts, coreContent, allCoreContent } from 'pliny/utils/contentlayer'
@@ -24,31 +23,29 @@ const layouts = {
 export async function generateMetadata({
   params,
 }: {
-  params: { slug: string[] }
+  params: Promise<{ slug: string[] }>
 }): Promise<Metadata | undefined> {
-  const slug = decodeURI(params.slug.join('/'))
-  const post = allBlogs.find((p) => p.slug === slug)
-  const authorList = post?.authors || ['default']
+  const { slug } = await params // Awaiting params here
+  const decodedSlug = decodeURI(slug.join('/'))
+  const post = allBlogs.find((p) => p.slug === decodedSlug)
+
+  if (!post) {
+    console.warn(`No post found for slug: ${decodedSlug}`)
+    return
+  }
+
+  const authorList = post.authors || ['default']
   const authorDetails = authorList.map((author) => {
     const authorResults = allAuthors.find((p) => p.slug === author)
     return coreContent(authorResults as Authors)
   })
-  if (!post) {
-    return
-  }
 
   const publishedAt = new Date(post.date).toISOString()
   const modifiedAt = new Date(post.lastmod || post.date).toISOString()
   const authors = authorDetails.map((author) => author.name)
-  let imageList = [siteMetadata.socialBanner]
-  if (post.images) {
-    imageList = typeof post.images === 'string' ? [post.images] : post.images
-  }
-  const ogImages = imageList.map((img) => {
-    return {
-      url: img.includes('http') ? img : siteMetadata.siteUrl + img,
-    }
-  })
+  const ogImages = [siteMetadata.socialBanner].map((img) => ({
+    url: img.includes('http') ? img : siteMetadata.siteUrl + img,
+  }))
 
   return {
     title: post.title,
@@ -69,32 +66,38 @@ export async function generateMetadata({
       card: 'summary_large_image',
       title: post.title,
       description: post.summary,
-      images: imageList,
+      images: ogImages,
     },
   }
 }
 
 export const generateStaticParams = async () => {
-  return allBlogs.map((p) => ({ slug: p.slug.split('/').map((name) => decodeURI(name)) }))
+  return allBlogs.map((p) => ({
+    slug: p.slug.split('/').map((name) => decodeURI(name)),
+  }))
 }
 
-export default async function Page({ params }: { params: { slug: string[] } }) {
-  const slug = decodeURI(params.slug.join('/')) // Await decoding
+export default async function Page({ params }: { params: Promise<{ slug: string[] }> }) {
+  const { slug } = await params // Awaiting params here
+  const decodedSlug = decodeURI(slug.join('/'))
+
   const sortedCoreContents = allCoreContent(sortPosts(allBlogs))
-  const postIndex = sortedCoreContents.findIndex((p) => p.slug === slug)
+  const postIndex = sortedCoreContents.findIndex((p) => p.slug === decodedSlug)
 
   if (postIndex === -1) {
+    console.warn(`Post not found for slug: ${decodedSlug}`)
     return notFound()
   }
 
   const prev = sortedCoreContents[postIndex + 1]
   const next = sortedCoreContents[postIndex - 1]
-  const post = allBlogs.find((p) => p.slug === slug) as Blog
-  const authorList = post?.authors || ['default']
+  const post = allBlogs.find((p) => p.slug === decodedSlug) as Blog
+  const authorList = post.authors || ['default']
   const authorDetails = authorList.map((author) => {
     const authorResults = allAuthors.find((p) => p.slug === author)
     return coreContent(authorResults as Authors)
   })
+
   const mainContent = coreContent(post)
   const jsonLd = post.structuredData
   jsonLd['author'] = authorDetails.map((author) => ({

@@ -4,29 +4,25 @@ import { allCoreContent, sortPosts } from 'pliny/utils/contentlayer'
 import ListLayout from '@/layouts/ListLayoutWithTags'
 import fs from 'fs'
 import path from 'path'
-import { slug } from 'github-slugger'
+import { slug as generateSlug } from 'github-slugger'
 
 // Generate static params for SSG
 export const generateStaticParams = async () => {
   const filePath = path.join(process.cwd(), 'app', 'course-data.json')
-
   if (!fs.existsSync(filePath) || fs.readFileSync(filePath, 'utf-8').trim() === '') {
     console.error('Error: course-data.json is missing or empty')
     return []
   }
-
   const courseData = JSON.parse(fs.readFileSync(filePath, 'utf-8'))
-  const paths = Object.keys(courseData).map((courseSlug) => ({
+  return Object.keys(courseData).map((courseSlug) => ({
     course: courseSlug,
   }))
-
-  console.log('Generated paths:', paths) // Inspect generated paths in the console
-  return paths
 }
 
-// Metadata generation for the course page
-export async function generateMetadata({ params }: { params: { course: string } }) {
-  const courseSlug = decodeURI(params.course) // No need for await here
+// Metadata generation
+export async function generateMetadata({ params }: { params: Promise<{ course: string }> }) {
+  const resolvedParams = await params // Await `params` for Next.js compatibility
+  const courseSlug = decodeURI(resolvedParams.course)
   const courseTitle = courseSlug
     .split('-')
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
@@ -39,8 +35,9 @@ export async function generateMetadata({ params }: { params: { course: string } 
 }
 
 // Component for the course page
-export default function CoursesPage({ params }: { params: { course: string } }) {
-  const courseSlug = decodeURI(params.course) // No need for await here
+export default async function CoursesPage({ params }: { params: Promise<{ course: string }> }) {
+  const resolvedParams = await params // Await `params` to access properties
+  const courseSlug = decodeURI(resolvedParams.course)
 
   // Convert slug to a human-readable title
   const courseTitle = courseSlug
@@ -48,10 +45,9 @@ export default function CoursesPage({ params }: { params: { course: string } }) 
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ')
 
-  // Filter and sort posts by course
   const filteredPosts = allCoreContent(
     sortPosts(
-      allBlogs.filter((post: Blog) => post.course && slug(post.course) === courseSlug)
+      allBlogs.filter((post: Blog) => post.course && generateSlug(post.course) === courseSlug)
     ).reverse()
   )
 
