@@ -1,0 +1,215 @@
+---
+title: "Part 1: Introduction to TypeScript and Basic Types"
+summary: "In Part 1 of our TypeScript Crash Course, we introduce TypeScript, exploring its benefits over JavaScript and how to use basic type annotations to write safer code."
+date: "Nov 19 2024"
+tags: ["typescript", "web development", "static typing", "type annotations"]
+draft: true
+course: "TypeScript Crash Course"
+---
+
+Welcome to the **TypeScript Crash Course**! 🎉 After our in-depth look at JavaScript’s fundamentals, it’s time to introduce **TypeScript**—a powerful extension of JavaScript that adds **static typing**. TypeScript enhances JavaScript by enabling you to catch errors early, improve readability, and create more robust code, especially in larger projects. Let’s start with the basics and see why TypeScript is so valuable! 🚀
+
+## What is TypeScript? 🤔
+
+**TypeScript** is a superset of JavaScript created by Microsoft. It compiles to plain JavaScript, so it runs anywhere JavaScript does (in browsers, Node.js, etc.). The main advantage? TypeScript adds **static types**, allowing you to declare types for variables, function parameters, and return values. This way, you can catch type-related bugs during development instead of at runtime.
+
+### Key Benefits of TypeScript
+
+1. **Early Error Detection**: Type errors are caught during development, reducing runtime errors.
+2. **Improved Readability**: Explicit types make it clear what type of data is expected.
+3. **Enhanced Tooling**: TypeScript works seamlessly with editors like VS Code, providing autocompletion and refactoring tools.
+4. **Better Code Organization**: With TypeScript, you can define interfaces, enums, and classes with clearer structure.
+
+---
+
+## Setting Up TypeScript 🔧
+
+To start using TypeScript, you’ll need to install it. You can add TypeScript to an existing Node.js project or start fresh.
+
+### Installation
+
+```bash
+npm install -g typescript
+```
+
+### Creating a TypeScript File
+
+Create a `.ts` file, for example, `hello.ts`, and write your first TypeScript code!
+
+```typescript
+function greet(name: string): string {
+    return `Hello, ${name}!`;
+}
+
+console.log(greet("Alice"));
+```
+
+### Compiling TypeScript to JavaScript
+
+To run TypeScript, compile it to JavaScript using:
+
+```bash
+tsc hello.ts
+```
+
+This will generate a `hello.js` file that you can run with `node hello.js`.
+
+---
+
+## Basic Type Annotations 📝
+
+TypeScript’s core feature is **type annotations**. Let’s look at some common types and how to annotate them.
+
+### 1. Primitive Types
+
+TypeScript supports the same primitive types as JavaScript:
+
+- `string`: Represents text.
+- `number`: Represents numbers (both integers and floats).
+- `boolean`: Represents `true` or `false` values.
+
+Example:
+
+```typescript
+let username: string = "Alice";
+let age: number = 25;
+let isStudent: boolean = true;
+```
+
+### 2. Arrays
+
+For arrays, you can specify the type of elements they contain.
+
+```typescript
+let numbers: number[] = [1, 2, 3];
+let names: string[] = ["Alice", "Bob", "Charlie"];
+```
+
+Or, using **generic types**:
+
+```typescript
+let numbers: Array<number> = [1, 2, 3];
+```
+
+### 3. Functions
+
+In TypeScript, you specify parameter and return types for functions.
+
+```typescript
+function add(a: number, b: number): number {
+    return a + b;
+}
+```
+
+This function expects two numbers as parameters and returns a number. If you pass incorrect types, TypeScript will show an error.
+
+---
+
+## Type Inference 🔍
+
+TypeScript can often **infer types** based on the initial value you assign, so you don’t always need to specify them.
+
+```typescript
+let city = "New York"; // TypeScript infers city as string
+let count = 42; // TypeScript infers count as number
+```
+
+However, explicitly typing variables is a good practice, especially in complex codebases.
+
+---
+
+## Special Types: `any` and `unknown` 🎭
+
+TypeScript provides two special types for flexibility:
+
+- **`any`**: Disables type-checking for the variable (like a regular JavaScript variable). Use sparingly, as it removes TypeScript’s safety benefits.
+- **`unknown`**: Similar to `any`, but you must check the type before using it.
+
+Example:
+
+```typescript
+let data: any = "hello";
+data = 42; // No error
+
+let value: unknown = "world";
+if (typeof value === "string") {
+    console.log(value.toUpperCase()); // Type-safe usage
+}
+```
+
+---
+
+## Practical Example: Simple Calculator 📌
+
+Let’s apply these basics in a **simple calculator**.
+
+1. Define a function `calculate` that accepts two numbers and a string operator (`+`, `-`, `*`, `/`).
+2. Use TypeScript types for the parameters and return type.
+3. Test the function by calling it with different inputs.
+
+### Example Solution
+
+```typescript
+function calculate(a: number, b: number, operator: string): number | string {
+    switch (operator) {
+        case "+":
+            return a + b;
+        case "-":
+            return a - b;
+        case "*":
+            return a * b;
+        case "/":
+            return b !== 0 ? a / b : "Cannot divide by zero";
+        default:
+            return "Invalid operator";
+    }
+}
+
+console.log(calculate(10, 5, "+")); // Output: 15
+console.log(calculate(10, 5, "/")); // Output: 2
+console.log(calculate(10, 0, "/")); // Output: "Cannot divide by zero"
+```
+
+Here, we’ve defined `a` and `b` as `number`, and `operator` as `string`. The function returns a `number` or a `string` if there’s an error.
+
+---
+
+## Practice Challenge: Type Annotations for a To-Do List 🎲
+
+Let’s practice using types with a simple **To-Do List**.
+
+1. Create a `Task` interface with `title` (string) and `completed` (boolean) properties.
+2. Define an array of tasks using the `Task` interface.
+3. Write a function `addTask` that accepts a `Task` and adds it to the array.
+
+### Example Solution
+
+```typescript
+interface Task {
+    title: string;
+    completed: boolean;
+}
+
+let tasks: Task[] = [
+    { title: "Learn TypeScript", completed: false },
+    { title: "Write a blog post", completed: true }
+];
+
+function addTask(task: Task): void {
+    tasks.push(task);
+    console.log(`Added task: ${task.title}`);
+}
+
+addTask({ title: "Go for a run", completed: false });
+console.log(tasks);
+```
+
+In this example, `tasks` is an array of `Task` objects, and `addTask` adds new tasks to the array.
+
+---
+
+## Wrapping Up
+
+In Part 1 of our TypeScript series, we introduced **TypeScript** and explored basic type annotations, arrays, functions, and special types like `any` and `unknown`. By specifying types, you’ll prevent many common JavaScript bugs and make your code easier to understand and maintain.
+
+In Part 2, we’ll dive into **interfaces and type aliases**, learning how to structure complex types and organize code even better. Thanks for joining, and happy coding with TypeScript! 🎉

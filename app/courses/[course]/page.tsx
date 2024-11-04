@@ -1,12 +1,12 @@
-import { allBlogs } from 'contentlayer/generated'
+import { allBlogs, Blog } from 'contentlayer/generated'
 import { notFound } from 'next/navigation'
 import { allCoreContent, sortPosts } from 'pliny/utils/contentlayer'
 import ListLayout from '@/layouts/ListLayoutWithTags'
 import fs from 'fs'
 import path from 'path'
-import courseData from 'app/course-data.json'
-import slugify from 'slugify'
+import { slug } from 'github-slugger'
 
+// Generate static params for SSG
 export const generateStaticParams = async () => {
   const filePath = path.join(process.cwd(), 'app', 'course-data.json')
 
@@ -24,16 +24,23 @@ export const generateStaticParams = async () => {
   return paths
 }
 
+// Metadata generation for the course page
 export async function generateMetadata({ params }: { params: { course: string } }) {
-  const course = decodeURI(params.course)
+  const courseSlug = decodeURI(params.course) // No need for await here
+  const courseTitle = courseSlug
+    .split('-')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ')
+
   return {
-    title: course,
-    description: `Posts tagged under ${course}`,
+    title: courseTitle,
+    description: `Posts tagged under ${courseTitle}`,
   }
 }
 
+// Component for the course page
 export default function CoursesPage({ params }: { params: { course: string } }) {
-  const courseSlug = decodeURI(params.course)
+  const courseSlug = decodeURI(params.course) // No need for await here
 
   // Convert slug to a human-readable title
   const courseTitle = courseSlug
@@ -41,9 +48,10 @@ export default function CoursesPage({ params }: { params: { course: string } }) 
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ')
 
+  // Filter and sort posts by course
   const filteredPosts = allCoreContent(
     sortPosts(
-      allBlogs.filter((post) => post.course && slugify(post.course, { lower: true }) === courseSlug)
+      allBlogs.filter((post: Blog) => post.course && slug(post.course) === courseSlug)
     ).reverse()
   )
 

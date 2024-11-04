@@ -1,0 +1,227 @@
+---
+title: "Part 1: Closures and the Execution Context"
+summary: "In Part 1 of our JavaScript Deep Dive, we explore closures, execution contexts, the call stack, and scope chains to understand JavaScript’s powerful function mechanics."
+date: "Nov 15 2024"
+tags: ["JavaScript", "advanced concepts", "web development"]
+course: "JavaScript Deep Dive"
+draft: false
+---
+
+Welcome to the **Deep Dive** section of our **JavaScript Crash Course**! 🎉 Now that we’ve completed the fundamentals and more intermediate topics, it’s time to go beneath the surface and understand some core mechanisms of JavaScript. In **Part 11**, we’ll explore **closures** and the **execution context**. These concepts are essential to truly mastering JavaScript’s inner workings. Let’s dive in! 🚀
+
+## Understanding Execution Context 🔍
+
+The **execution context** is the environment where JavaScript code is evaluated and executed. Each time a function is called, a new execution context is created, which defines variables, how functions access their environment, and controls the flow of the program.
+
+### Types of Execution Contexts
+
+There are three main types:
+
+1. **Global Execution Context**: Created when the code first runs, containing global variables and functions.
+2. **Function Execution Context**: Created each time a function is invoked.
+3. **Eval Execution Context** (less common): Created when `eval()` is called.
+
+### Execution Context Lifecycle
+
+1. **Creation Phase**: JavaScript sets up the **scope chain**, allocates space for variables, functions, and `this`, and initializes them with `undefined`.
+2. **Execution Phase**: JavaScript assigns values to variables and executes the code.
+
+### Example: Execution Context in Action
+
+Consider this example:
+
+```javascript
+let a = 10;
+
+function outer() {
+    let b = 20;
+    function inner() {
+        let c = 30;
+        console.log(a + b + c); // Accesses variables in its lexical scope
+    }
+    inner();
+}
+
+outer();
+```
+
+1. **Global Context** is created, defining `a` and `outer`.
+2. **Outer Function Context** is created when `outer()` is called, creating `b` and `inner`.
+3. **Inner Function Context** is created when `inner()` is called, defining `c`.
+
+---
+
+## Call Stack and Scope Chain 📚
+
+JavaScript is single-threaded, meaning it has a **call stack** where it keeps track of function calls. When a function is invoked, it’s added to the stack; when it completes, it’s removed.
+
+### Call Stack Example
+
+Using the previous example, here’s how the stack looks:
+
+1. `outer()` is added to the call stack.
+2. `inner()` is called inside `outer()` and added to the stack.
+3. `inner()` completes, so it’s removed from the stack.
+4. Finally, `outer()` completes and is removed.
+
+The **scope chain** determines the hierarchy of variable access. If a variable isn’t in the current scope, JavaScript looks “up” to outer scopes.
+
+---
+
+## What are Closures? 🧵
+
+**Closures** occur when a function “remembers” its lexical scope, even after the outer function has completed. Closures are a fundamental part of JavaScript’s functional nature.
+
+### How Closures Work
+
+A closure is created when:
+
+1. An inner function is returned or used outside its scope.
+2. The inner function retains access to its lexical scope, even if the outer function has finished execution.
+
+### Example of a Closure
+
+```javascript
+function createCounter() {
+    let count = 0; // Variable in the outer function’s scope
+
+    return function() { // Inner function (closure)
+        count++;
+        console.log(count);
+    };
+}
+
+const counter = createCounter();
+counter(); // Output: 1
+counter(); // Output: 2
+```
+
+Here, `count` is preserved in the closure, allowing it to “remember” its value between calls to `counter()`. Although `createCounter` has completed, its variables persist thanks to the closure.
+
+---
+
+## Practical Uses of Closures 📌
+
+Closures enable powerful programming patterns, including:
+
+### 1. **Data Encapsulation**
+
+Closures help create **private variables** by containing variables within a function’s scope, preventing outside access.
+
+```javascript
+function Person(name) {
+    let privateName = name; // Private variable
+
+    return {
+        getName: function() { return privateName; },
+        setName: function(newName) { privateName = newName; }
+    };
+}
+
+let person = Person("Alice");
+console.log(person.getName()); // Output: "Alice"
+person.setName("Bob");
+console.log(person.getName()); // Output: "Bob"
+```
+
+### 2. **Memoization**
+
+Closures can store previously computed results to improve performance, a technique called **memoization**.
+
+```javascript
+function memoize(fn) {
+    let cache = {}; // Cache within closure
+
+    return function(x) {
+        if (cache[x] !== undefined) {
+            console.log("Using cached result");
+            return cache[x];
+        } else {
+            let result = fn(x);
+            cache[x] = result;
+            return result;
+        }
+    };
+}
+
+const square = memoize((x) => x * x);
+console.log(square(4)); // Calculates and caches result
+console.log(square(4)); // Uses cached result
+```
+
+### 3. **Event Handlers and Callbacks**
+
+Closures are also essential when writing asynchronous code, where a function needs to maintain access to variables outside its immediate scope.
+
+---
+
+## Common Pitfalls with Closures ⚠️
+
+Closures can lead to unexpected behavior if not used carefully. Here are some common pitfalls:
+
+### Example: Loop Variables and Closures
+
+```javascript
+for (var i = 1; i <= 3; i++) {
+    setTimeout(() => console.log(i), 1000);
+}
+// Output: 4, 4, 4
+```
+
+Because `var` does not create block-scoped variables, the same `i` is shared across all iterations. A solution is to use `let` or create an **IIFE** (Immediately Invoked Function Expression) to create a new scope for each iteration.
+
+### Solution with `let`
+
+```javascript
+for (let i = 1; i <= 3; i++) {
+    setTimeout(() => console.log(i), 1000);
+}
+// Output: 1, 2, 3
+```
+
+### Solution with IIFE
+
+```javascript
+for (var i = 1; i <= 3; i++) {
+    (function(x) {
+        setTimeout(() => console.log(x), 1000);
+    })(i);
+}
+// Output: 1, 2, 3
+```
+
+---
+
+## Practice Challenge: Click Counter with Closures 🎲
+
+Let’s practice closures by creating a **click counter**:
+
+1. Write a `createClickCounter` function that keeps track of the number of clicks.
+2. Each time the counter is clicked, it should increment the count and display the updated count.
+
+### Example Solution
+
+```javascript
+function createClickCounter() {
+    let count = 0;
+
+    return function() {
+        count++;
+        console.log("Click count:", count);
+    };
+}
+
+const counter = createClickCounter();
+counter(); // Output: Click count: 1
+counter(); // Output: Click count: 2
+```
+
+Each call to `counter()` increments the `count` variable, which persists because of the closure.
+
+---
+
+## Wrapping Up
+
+In Part 1, we explored the **execution context** and **closures**—two advanced topics essential to understanding JavaScript’s function mechanics. By mastering these, you’ll be better equipped to write powerful, flexible code and avoid common pitfalls.
+
+In Part 2, we’ll continue our deep dive with a thorough look at **JavaScript’s event loop and asynchronous execution**. Thanks for following along, and keep up the great work! 🎉

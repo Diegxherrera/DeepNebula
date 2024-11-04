@@ -1,0 +1,229 @@
+---
+title: "Part 4: Type Assertions, Unions, and Intersections"
+summary: "In Part 4 of our TypeScript Crash Course, we dive into type assertions, union types, and intersection types, providing more control over complex type scenarios in TypeScript."
+date: "Nov 22 2024"
+tags: ["typescript", "type assertions", "union types", "web development"]
+draft: true
+course: "TypeScript Crash Course"
+---
+
+Welcome back to the **TypeScript Crash Course**! 🎉 In Part 3, we explored functions and generics, adding flexibility to our code. In **Part 4**, we’ll dive into more advanced type management techniques: **type assertions**, **unions**, and **intersections**. These features allow us to handle complex data structures, work with multiple types, and take control of specific type behaviors. Let’s get started! 🚀
+
+## What are Type Assertions? 🤔
+
+**Type assertions** allow you to tell TypeScript that a value has a specific type, overriding TypeScript’s inferred type. This is useful in situations where TypeScript doesn’t have enough context to accurately determine a type.
+
+### Syntax
+
+There are two ways to use type assertions:
+
+1. **Angle-bracket syntax**: `<Type>value`
+2. **As-syntax**: `value as Type` (recommended in modern TypeScript)
+
+### Example: Type Assertion
+
+```typescript
+let value: unknown = "Hello, TypeScript";
+
+// Using angle-bracket syntax
+let length1 = (<string>value).length;
+
+// Using as-syntax
+let length2 = (value as string).length;
+
+console.log(length1); // Output: 17
+console.log(length2); // Output: 17
+```
+
+In this example, we assert that `value` is a `string`, allowing us to access the `length` property.
+
+---
+
+## Working with Union Types 🔀
+
+**Union types** allow a variable to hold values of different types. They’re defined using the `|` symbol and are helpful for handling scenarios where a value could be of multiple types.
+
+### Example: Basic Union Type
+
+```typescript
+let id: string | number;
+
+id = "abc123"; // Valid
+id = 123; // Valid
+// id = true; // ❌ Error: Type 'boolean' is not assignable to type 'string | number'.
+```
+
+Here, `id` can be either a `string` or a `number`, but nothing else.
+
+### Union Types in Functions
+
+Union types work well in functions, where different argument types may require different logic.
+
+```typescript
+function printId(id: string | number): void {
+    if (typeof id === "string") {
+        console.log("ID is a string:", id.toUpperCase());
+    } else {
+        console.log("ID is a number:", id.toFixed(2));
+    }
+}
+
+printId("abc123"); // Output: ID is a string: ABC123
+printId(123.45); // Output: ID is a number: 123.45
+```
+
+In this function, TypeScript narrows down the type using `typeof`, allowing us to handle `string` and `number` differently.
+
+---
+
+## Intersection Types 🔗
+
+**Intersection types** combine multiple types into one. A variable with an intersection type must satisfy all the included types.
+
+### Example: Intersection Type
+
+```typescript
+interface Name {
+    name: string;
+}
+
+interface Age {
+    age: number;
+}
+
+type Person = Name & Age;
+
+let person: Person = {
+    name: "Alice",
+    age: 25
+};
+
+console.log(person);
+```
+
+In this example, `Person` has properties from both `Name` and `Age`, requiring `person` to have both `name` and `age`.
+
+---
+
+## Combining Union and Intersection Types 🧩
+
+Union and intersection types can be combined for more advanced type management.
+
+### Example: Union of Intersections
+
+```typescript
+interface Dog {
+    type: "dog";
+    bark: () => void;
+}
+
+interface Cat {
+    type: "cat";
+    meow: () => void;
+}
+
+type Pet = Dog | Cat;
+
+function interactWithPet(pet: Pet) {
+    if (pet.type === "dog") {
+        pet.bark();
+    } else {
+        pet.meow();
+    }
+}
+```
+
+In this example, `Pet` is a union of `Dog` and `Cat`. We use `type` to determine the type of pet, allowing us to call the appropriate method.
+
+---
+
+## Practical Example: Advanced Form Validation 📋
+
+Let’s create a function to **validate form data** using union and intersection types.
+
+1. Define an interface `UserForm` with `username` (string) and `email` (string).
+2. Define an interface `AdminForm` with `role` (string) and `permissions` (array of strings).
+3. Create a union type `Form` that can be either `UserForm` or `AdminForm`.
+4. Write a function `validateForm` that validates based on the type.
+
+### Example Solution
+
+```typescript
+interface UserForm {
+    username: string;
+    email: string;
+}
+
+interface AdminForm {
+    role: string;
+    permissions: string[];
+}
+
+type Form = UserForm | AdminForm;
+
+function validateForm(form: Form): void {
+    if ("username" in form) {
+        console.log("Validating user form:", form.username, form.email);
+    } else if ("role" in form) {
+        console.log("Validating admin form:", form.role, form.permissions);
+    }
+}
+
+const userForm: UserForm = { username: "Alice", email: "alice@example.com" };
+const adminForm: AdminForm = { role: "admin", permissions: ["read", "write"] };
+
+validateForm(userForm); // Output: Validating user form: Alice alice@example.com
+validateForm(adminForm); // Output: Validating admin form: admin [ 'read', 'write' ]
+```
+
+In this example, `validateForm` distinguishes between `UserForm` and `AdminForm` based on their properties, allowing for flexible validation.
+
+---
+
+## Practice Challenge: Flexible Shape Calculation 🎲
+
+Let’s practice with a **shape calculator**.
+
+1. Define an interface `Square` with `sideLength` (number).
+2. Define an interface `Rectangle` with `width` and `height` (both numbers).
+3. Create a union type `Shape` that can be either `Square` or `Rectangle`.
+4. Write a function `calculateArea` that calculates the area based on the type.
+
+### Example Solution
+
+```typescript
+interface Square {
+    sideLength: number;
+}
+
+interface Rectangle {
+    width: number;
+    height: number;
+}
+
+type Shape = Square | Rectangle;
+
+function calculateArea(shape: Shape): number {
+    if ("sideLength" in shape) {
+        return shape.sideLength ** 2;
+    } else {
+        return shape.width * shape.height;
+    }
+}
+
+const square: Square = { sideLength: 5 };
+const rectangle: Rectangle = { width: 4, height: 6 };
+
+console.log("Square area:", calculateArea(square)); // Output: Square area: 25
+console.log("Rectangle area:", calculateArea(rectangle)); // Output: Rectangle area: 24
+```
+
+This example uses a union type to calculate the area based on the shape’s properties.
+
+---
+
+## Wrapping Up
+
+In Part 4 of our TypeScript series, we explored **type assertions**, **union types**, and **intersection types**. These tools give you control over complex type scenarios, allowing for greater flexibility and precision in your TypeScript projects.
+
+In Part 5, we’ll wrap up the TypeScript series by exploring **type guards, enums, and advanced type manipulation** techniques. Thanks for following along, and happy coding! 🎉

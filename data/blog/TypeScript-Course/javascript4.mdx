@@ -1,0 +1,218 @@
+---
+title: "Part 4: Arrays and Objects"
+summary: "In Part 4 of our JavaScript Crash Course, we explore arrays and objects, key data structures that help you store, organize, and manage collections of data in your programs."
+date: "Nov 8 2024"
+tags: ["javascript", "web development", "arrays", "objects"]
+course: "JavaScript Crash Course"
+draft: false
+---
+
+Welcome back to the **JavaScript Crash Course** series! 🎉 In Part 3, we learned about functions and scope, two essential tools for organizing code and controlling access to variables. Today, in Part 4, we’re going to dive into **arrays** and **objects**. These are powerful structures that allow you to store, organize, and work with collections of data. Let’s get started! 🚀
+
+## Arrays: Storing Lists of Data 📋
+
+An **array** is a special type of variable that can hold more than one value. Each value in an array is stored at a specific position, or **index**. Arrays are particularly useful when you have a list of items to work with.
+
+### Creating an Array
+
+You can create an array using square brackets `[]` and separate each item with a comma:
+
+```javascript
+let fruits = ["apple", "banana", "cherry"];
+```
+
+Here, `fruits` is an array containing three strings. You can access items in an array using their index, which starts at 0.
+
+```javascript
+console.log(fruits[0]); // Output: "apple"
+console.log(fruits[2]); // Output: "cherry"
+```
+
+### Adding and Removing Items
+
+JavaScript provides several methods to add and remove items from arrays.
+
+- **push()**: Adds an item to the end of the array.
+- **pop()**: Removes the last item in the array.
+- **unshift()**: Adds an item to the beginning of the array.
+- **shift()**: Removes the first item in the array.
+
+Example:
+
+```javascript
+fruits.push("orange"); // Adds "orange" to the end
+console.log(fruits); // ["apple", "banana", "cherry", "orange"]
+
+fruits.pop(); // Removes the last item ("orange")
+console.log(fruits); // ["apple", "banana", "cherry"]
+```
+
+### Looping through Arrays
+
+You can loop through each item in an array using a `for` loop, or more conveniently with the `for...of` loop.
+
+```javascript
+for (let fruit of fruits) {
+    console.log(fruit);
+}
+```
+
+---
+
+## Common Array Methods 📚
+
+JavaScript arrays come with many built-in methods that make working with data easier:
+
+- **length**: Returns the number of items in the array.
+
+  ```javascript
+  console.log(fruits.length); // Output: 3
+    ```
+
+- **join()**: Converts all elements in an array into a single string.
+
+  ```javascript
+  console.log(fruits.join(", ")); // Output: "apple, banana, cherry"
+    ```
+
+- **indexOf()**: Finds the index of a specific item.
+
+  ```javascript
+  console.log(fruits.indexOf("banana")); // Output: 1
+    ```
+
+- **slice()**: Returns a portion of the array as a new array.
+
+  ```javascript
+  let newFruits = fruits.slice(0, 2); // ["apple", "banana"]
+    ```
+
+---
+
+## Objects: Storing Key-Value Pairs 🔑
+
+While arrays are great for lists, **objects** let you store data as **key-value pairs**. Each piece of data (or "property") in an object has a **key** (or "name") and an associated **value**.
+
+### Creating an Object
+
+You can create an object using curly braces `{}` and define key-value pairs inside.
+
+```javascript
+let person = {
+    name: "Alice",
+    age: 30,
+    city: "New York"
+};
+```
+
+Here, `person` is an object with three properties: `name`, `age`, and `city`.
+
+### Accessing and Modifying Properties
+
+To access a property in an object, you can use **dot notation** or **bracket notation**.
+
+```javascript
+console.log(person.name); // Output: "Alice"
+console.log(person["city"]); // Output: "New York"
+```
+
+To modify a property, you can assign a new value to it.
+
+```javascript
+person.age = 31;
+console.log(person.age); // Output: 31
+```
+
+### Adding and Removing Properties
+
+You can add a new property to an object by simply defining it, and remove a property using the `delete` keyword.
+
+```javascript
+person.country = "USA"; // Adds a new property
+console.log(person); // { name: "Alice", age: 31, city: "New York", country: "USA" }
+
+delete person.city; // Removes the "city" property
+console.log(person); // { name: "Alice", age: 31, country: "USA" }
+```
+
+---
+
+## Looping through Objects
+
+JavaScript allows you to loop through the properties of an object using the `for...in` loop:
+
+```javascript
+for (let key in person) {
+    console.log(key + ": " + person[key]);
+}
+```
+
+This will output each key-value pair in the `person` object.
+
+---
+
+## Combining Arrays and Objects 🧩
+
+Arrays and objects can be combined to handle more complex data structures, like lists of objects.
+
+### Example: Array of Objects
+
+```javascript
+let users = [
+    { name: "Alice", age: 25 },
+    { name: "Bob", age: 30 },
+    { name: "Charlie", age: 35 }
+];
+
+// Accessing the first user's name
+console.log(users[0].name); // Output: "Alice"
+
+// Looping through the array
+for (let user of users) {
+    console.log(user.name + " is " + user.age + " years old.");
+}
+```
+
+---
+
+## Practice Challenge: Creating a To-Do List 🎲
+
+Let’s practice with a simple **To-Do List**!
+
+1. Create an array called `todoList` with some initial to-do items as objects. Each item should have `task` (string) and `completed` (boolean) properties.
+2. Add a function called `displayTodos` that loops through `todoList` and logs each task.
+3. Add a function `addTodo` that adds a new task to `todoList`.
+4. Test the functions by displaying the list, adding a new task, and displaying the list again.
+
+Example Solution:
+
+```javascript
+let todoList = [
+    { task: "Buy groceries", completed: false },
+    { task: "Clean the house", completed: true },
+    { task: "Pay bills", completed: false }
+];
+
+function displayTodos() {
+    for (let item of todoList) {
+        console.log(item.task + " - " + (item.completed ? "Done" : "Pending"));
+    }
+}
+
+function addTodo(task) {
+    todoList.push({ task: task, completed: false });
+}
+
+// Test
+displayTodos();
+addTodo("Walk the dog");
+displayTodos();
+```
+
+---
+
+## Wrapping Up
+
+In this part, we explored **arrays** and **objects**—two essential data structures in JavaScript. With these tools, you can create and manage more complex data in your applications. In Part 5, we’ll dive into **array and object methods**, and learn how to work with data even more efficiently.
+
+Thanks for reading, and keep practicing! Your JavaScript skills are growing! 🌱

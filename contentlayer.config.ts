@@ -1,7 +1,7 @@
 import { defineDocumentType, ComputedFields, makeSource } from 'contentlayer2/source-files'
 import { writeFileSync } from 'fs'
 import readingTime from 'reading-time'
-import slugify from 'slugify'
+import { slug } from 'github-slugger'
 import path from 'path'
 import { fromHtmlIsomorphic } from 'hast-util-from-html-isomorphic'
 // Remark packages
@@ -65,7 +65,7 @@ function createTagCount(allBlogs) {
   allBlogs.forEach((file) => {
     if (file.tags && (!isProduction || file.draft !== true)) {
       file.tags.forEach((tag) => {
-        const formattedTag = slugify(tag)
+        const formattedTag = slug(tag)
         if (formattedTag in tagCount) {
           tagCount[formattedTag] += 1
         } else {
@@ -82,7 +82,7 @@ function createCourseData(allBlogs) {
 
   allBlogs.forEach((blog) => {
     if (blog.course) {
-      const courseSlug = slugify(blog.course, { lower: true })
+      const courseSlug = slug(blog.course) // Se usa github-slugger
 
       if (courseCounts[courseSlug]) {
         courseCounts[courseSlug].count += 1
@@ -208,13 +208,10 @@ export default makeSource({
     ],
   },
   onSuccess: async (importData) => {
-    const { allDocuments } = await importData()
+    const { allBlogs } = await importData()
 
-    // Filter out only Blog documents
-    const allBlogs = allDocuments.filter((doc) => doc._type === 'Blog')
-
+    createCourseData(allBlogs)
     createTagCount(allBlogs)
     createSearchIndex(allBlogs)
-    createCourseData(allBlogs)
   },
 })

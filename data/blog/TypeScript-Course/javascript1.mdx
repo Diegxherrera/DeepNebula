@@ -1,0 +1,148 @@
+---
+title: "Part 1: The Basics"
+summary: "Kickstart your JavaScript journey with this crash course series! In Part 1, we’ll introduce JavaScript’s basics, covering variables, data types, operators, and simple syntax."
+date: "Nov 5 2024"
+tags: ["javascript", "web development", "basics"]
+course: "JavaScript Crash Course"
+draft: false
+---
+
+Welcome to the **JavaScript Crash Course** series! 🎉 In this first part, we’ll dive into the basics of JavaScript, one of the most popular programming languages on the web. Whether you're new to coding or looking to brush up on your skills, this guide will set you up with the essentials. So let’s get started! 🚀
+
+## What is JavaScript? 🤔
+
+JavaScript is a versatile, high-level programming language primarily used for adding interactivity to web pages. It runs on almost every modern browser, making it an essential tool for web developers. With JavaScript, you can create dynamic content, respond to user interactions, and even build complex applications.
+
+> JavaScript is known as one of the **big three** web technologies, alongside HTML and CSS.
+
+## Getting Set Up 🛠️
+
+To start writing JavaScript, you only need a text editor and a browser!
+
+1. **Text Editor**: Use any code editor you like, such as [VS Code](https://code.visualstudio.com/) or [Sublime Text](https://www.sublimetext.com/).
+2. **Browser**: Open your browser's console to see JavaScript in action. You can access the console by pressing `F12` or right-clicking on a page and selecting **Inspect** > **Console**.
+
+### Writing Your First JavaScript Code
+
+Open a new HTML file in your editor and add the following code:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Crash Course</title>
+</head>
+<body>
+    <script>
+        console.log("Hello, JavaScript World!");
+    </script>
+</body>
+</html>
+```
+
+Open this file in your browser, press `F12` to open the console, and you should see **"Hello, JavaScript World!"** printed. Congrats—you just wrote your first JavaScript code! 🎉
+
+---
+
+## JavaScript Basics: Variables and Data Types
+
+### Variables 🧮
+
+Variables are used to store data in JavaScript. There are three ways to declare a variable:
+
+- **let**: Allows you to create variables that can be updated.
+- **const**: Used for constants; these values can't be changed once assigned.
+- **var**: The old way to declare variables (we mostly avoid using it now).
+
+Here’s how to declare variables:
+
+```javascript
+let name = "Alice";  // Variable that can change
+const age = 30;      // Constant variable, cannot change
+```
+
+### Data Types 🏷️
+
+JavaScript has several data types that determine the kind of data a variable can hold.
+
+- **String**: Textual data, e.g., `"Hello"`
+- **Number**: Numeric data, e.g., `42` or `3.14`
+- **Boolean**: True/false values, e.g., `true` or `false`
+- **Null**: An empty or non-existent value, e.g., `null`
+- **Undefined**: A variable without a value, e.g., `let x;`
+
+Example:
+
+```javascript
+let message = "Hello, World!"; // String
+let score = 100;               // Number
+let isActive = true;           // Boolean
+let user = null;               // Null
+let response;                  // Undefined
+```
+
+## Operators in JavaScript ➕➖
+
+Operators allow you to manipulate values and variables. Here are some common types:
+
+- **Arithmetic Operators**: `+`, `-`, `*`, `/`, `%`
+- **Assignment Operators**: `=`, `+=`, `-=`, `*=`, `/=`
+- **Comparison Operators**: `==`, `!=`, `===`, `!==`, `>`, `<`, `>=`, `<=`
+- **Logical Operators**: `&&` (and), `||` (or), `!` (not)
+
+Example:
+
+```javascript
+let a = 10;
+let b = 20;
+
+console.log(a + b); // Addition: 30
+console.log(a > b); // Comparison: false
+console.log(a === b); // Strict Equality: false
+console.log(a !== b && a < b); // Logical and: true
+```
+
+## Strings and String Manipulation ✨
+
+Strings are sequences of characters. You can join, slice, and manipulate strings in many ways.
+
+Example:
+
+```javascript
+let greeting = "Hello";
+let name = "Alice";
+
+console.log(greeting + ", " + name + "!"); // Output: "Hello, Alice!"
+console.log(name.length); // Output: Length of the string
+console.log(name.toUpperCase()); // Output: "ALICE"
+```
+
+---
+
+## Your First Practice Challenge 🚀
+
+Try this small challenge to test your knowledge of JavaScript basics:
+
+1. Create two variables, `firstName` and `lastName`, and store your name in them.
+2. Concatenate these variables into a new variable called `fullName`.
+3. Print `fullName` to the console.
+
+Example Solution:
+
+```javascript
+let firstName = "John";
+let lastName = "Doe";
+let fullName = firstName + " " + lastName;
+
+console.log("Full Name:", fullName); // Output: "Full Name: John Doe"
+```
+
+---
+
+## Wrapping Up
+
+In this first part of the JavaScript Crash Course, we covered the basics: variables, data types, operators, and a few string manipulations. With these fundamentals, you can start experimenting and writing simple programs. Next up, we’ll dive deeper into control structures like **loops** and **conditions** in Part 2.
+
+Thanks for joining in, and happy coding with JavaScript! Stay tuned for more! 🥳

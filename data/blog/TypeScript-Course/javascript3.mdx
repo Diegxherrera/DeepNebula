@@ -1,0 +1,166 @@
+---
+title: "Part 3: Functions and Scope"
+summary: "In Part 3 of our JavaScript Crash Course, we dive into functions, parameters, return values, and scope, giving you essential tools to organize and reuse code effectively."
+date: "Nov 7 2024"
+tags: ["javascript", "web development", "functions", "scope"]
+course: "JavaScript Crash Course"
+draft: true
+---
+
+Welcome back to the **JavaScript Crash Course** series! 🎉 So far, we’ve covered the basics and learned how to control the flow of our programs with **conditionals** and **loops**. In this part, we’re going to look at **functions**—one of the most powerful tools in programming! Functions help us organize our code, make it reusable, and break down complex problems into manageable parts. Let’s dive in! 🚀
+
+## What is a Function? 🤔
+
+A function is a reusable block of code designed to perform a specific task. Functions make our code modular and easy to understand. Once we define a function, we can use (or "call") it whenever we need it without rewriting the same code.
+
+### Defining and Calling a Function
+
+To define a function in JavaScript, we use the `function` keyword, followed by the function name, parentheses `()`, and curly braces `{}`:
+
+```javascript
+function greet() {
+    console.log("Hello, World!");
+}
+
+// Calling the function
+greet(); // Output: "Hello, World!"
+```
+
+### Parameters and Arguments
+
+Functions can accept **parameters**, which are values you pass into the function to customize its behavior. Parameters go inside the parentheses `()` when defining the function.
+
+```javascript
+function greetUser(name) {
+    console.log("Hello, " + name + "!");
+}
+
+// Calling the function with an argument
+greetUser("Alice"); // Output: "Hello, Alice!"
+```
+
+In this example, `name` is a parameter, and `"Alice"` is the argument we pass when calling the function.
+
+### Return Values
+
+Functions can also return values using the `return` keyword. This is useful when you want to get a result back from the function.
+
+```javascript
+function add(a, b) {
+    return a + b;
+}
+
+let result = add(5, 10); // result now holds the value 15
+console.log(result); // Output: 15
+```
+
+When the function encounters `return`, it immediately exits and sends back the specified value.
+
+---
+
+## Function Expressions and Arrow Functions ➡️
+
+In addition to the standard function syntax, JavaScript offers **function expressions** and **arrow functions**, which are alternative ways to define functions.
+
+### Function Expressions
+
+A function expression assigns a function to a variable. This is especially useful for creating functions that don’t need a specific name.
+
+```javascript
+const multiply = function(x, y) {
+    return x * y;
+};
+
+console.log(multiply(3, 4)); // Output: 12
+```
+
+### Arrow Functions
+
+Arrow functions provide a shorter syntax for writing functions. They’re commonly used in modern JavaScript, especially in array methods.
+
+```javascript
+const subtract = (a, b) => a - b;
+console.log(subtract(10, 3)); // Output: 7
+```
+
+For simple one-line functions, you can omit the `{}` and the `return` keyword.
+
+---
+
+## Understanding Scope 🧩
+
+**Scope** determines where variables and functions are accessible in your code. In JavaScript, we primarily deal with two types of scope: **global scope** and **local scope**.
+
+### Global Scope
+
+Variables declared outside of any function have **global scope**, meaning they can be accessed anywhere in your code.
+
+```javascript
+let globalVar = "I am global!";
+
+function showGlobalVar() {
+    console.log(globalVar);
+}
+
+showGlobalVar(); // Output: "I am global!"
+```
+
+### Local Scope
+
+Variables declared inside a function are in **local scope** (also called function scope). These variables are only accessible within that function.
+
+```javascript
+function showLocalVar() {
+    let localVar = "I am local!";
+    console.log(localVar);
+}
+
+showLocalVar(); // Output: "I am local!"
+console.log(localVar); // Error: localVar is not defined
+```
+
+### Block Scope
+
+With `let` and `const`, we also have **block scope**. Block-scoped variables exist only within the nearest pair of `{}`.
+
+```javascript
+if (true) {
+    let blockScoped = "I am block scoped!";
+    console.log(blockScoped); // Output: "I am block scoped!"
+}
+
+console.log(blockScoped); // Error: blockScoped is not defined
+```
+
+### Scope Chain
+
+JavaScript looks for variables in the current scope. If it can’t find them, it checks outer scopes, creating a **scope chain**. If the variable isn’t found in any scope, JavaScript throws an error.
+
+---
+
+## Practice Challenge: Functions and Scope 🎲
+
+Let’s put these concepts to practice with a small challenge!
+
+1. Create a function called `calculateArea` that takes two parameters, `width` and `height`.
+2. Inside the function, calculate the area (`width * height`) and return it.
+3. Test the function by calling it with different values and logging the results.
+
+Example Solution:
+
+```javascript
+function calculateArea(width, height) {
+    return width * height;
+}
+
+console.log(calculateArea(5, 10)); // Output: 50
+console.log(calculateArea(7, 3));  // Output: 21
+```
+
+---
+
+## Wrapping Up
+
+In this part, we explored functions, parameters, return values, and scope. With functions, you can make your code modular and reusable, and understanding scope helps you manage variables more effectively. In Part 4, we’ll dive into **arrays and objects** in JavaScript, two crucial tools for organizing and working with data.
+
+Thanks for reading, and keep coding! Your JavaScript skills are leveling up! 🚀

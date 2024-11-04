@@ -1,0 +1,222 @@
+---
+title: "Part 9: Error Handling and Debugging"
+summary: "In Part 9 of our JavaScript Crash Course, we cover essential techniques for handling errors and debugging code, helping you write resilient and reliable applications."
+date: "Nov 13 2024"
+tags: ["javascript", "web development", "error handling", "debugging"]
+course: "JavaScript Crash Course"
+draft: false
+---
+
+Welcome back to the **JavaScript Crash Course** series! 🎉 In Part 8, we learned about asynchronous JavaScript and how to handle tasks like data fetching with promises and async/await. In Part 9, we’re focusing on **error handling and debugging**—essential skills for writing reliable code and solving problems when they arise. Ready to make your code more resilient? Let’s go! 🚀
+
+## Why Error Handling is Important 🤔
+
+Errors are a natural part of coding, and handling them effectively makes your code **robust** and **user-friendly**. Instead of your app crashing, proper error handling lets you control what happens when things go wrong, showing helpful messages or retrying failed tasks.
+
+---
+
+## The Basics of Error Handling: try, catch, and finally 🛠️
+
+JavaScript offers a `try...catch` block for error handling. Code inside the `try` block is executed first, and if an error occurs, the `catch` block handles it.
+
+### Syntax
+
+```javascript
+try {
+    // Code that may throw an error
+} catch (error) {
+    // Code to handle the error
+} finally {
+    // Code that always runs, regardless of success or failure
+}
+```
+
+### Example
+
+```javascript
+try {
+    let result = riskyFunction();
+    console.log("Result:", result);
+} catch (error) {
+    console.error("An error occurred:", error.message);
+} finally {
+    console.log("This runs no matter what.");
+}
+```
+
+In this example, if `riskyFunction()` throws an error, the `catch` block logs it. The `finally` block always runs, even if there’s an error.
+
+---
+
+## Throwing Custom Errors 🚨
+
+You can create and throw your own errors using `throw`. This is useful for handling specific conditions in your code.
+
+### Example
+
+```javascript
+function divide(a, b) {
+    if (b === 0) {
+        throw new Error("Cannot divide by zero!");
+    }
+    return a / b;
+}
+
+try {
+    console.log(divide(10, 0));
+} catch (error) {
+    console.error("Error:", error.message);
+}
+```
+
+In this example, `throw` generates a custom error message if `b` is zero, which `catch` then handles.
+
+---
+
+## Debugging Techniques 🐞
+
+**Debugging** is the process of identifying and fixing issues in your code. JavaScript provides several tools to help with debugging.
+
+### 1. Using `console.log()`
+
+Adding `console.log()` statements is a quick way to see the values of variables and understand code flow.
+
+```javascript
+function calculateTotal(items) {
+    console.log("Items:", items);
+    let total = 0;
+    for (let item of items) {
+        console.log("Processing item:", item);
+        total += item.price;
+    }
+    return total;
+}
+```
+
+### 2. Using `console.error()`, `console.warn()`, and `console.table()`
+
+- `console.error()`: Use for logging errors.
+- `console.warn()`: Use for warnings that aren’t critical.
+- `console.table()`: Great for visualizing arrays of objects.
+
+```javascript
+console.error("This is an error message.");
+console.warn("This is a warning.");
+console.table([{ name: "Alice", age: 25 }, { name: "Bob", age: 30 }]);
+```
+
+### 3. Debugger Tool
+
+Modern browsers offer a **Debugger** tool that allows you to set **breakpoints**—pauses in your code to examine values and step through line by line.
+
+1. Open the DevTools (usually `F12` or right-click > Inspect).
+2. Go to the **Sources** tab.
+3. Click next to a line number to set a breakpoint.
+
+---
+
+## Handling Asynchronous Errors 🔄
+
+Handling errors in asynchronous code can be a bit different. With promises, you handle errors using `.catch()`. With async/await, you wrap code in a `try...catch` block.
+
+### Using `.catch()` with Promises
+
+```javascript
+fetch("https://api.example.com/data")
+    .then((response) => response.json())
+    .then((data) => console.log(data))
+    .catch((error) => console.error("Fetch error:", error));
+```
+
+### Using try...catch with Async/Await
+
+```javascript
+async function fetchData() {
+    try {
+        let response = await fetch("https://api.example.com/data");
+        let data = await response.json();
+        console.log(data);
+    } catch (error) {
+        console.error("Fetch error:", error);
+    }
+}
+
+fetchData();
+```
+
+---
+
+## Common Errors and How to Fix Them ⚙️
+
+Understanding common JavaScript errors can help you debug more effectively:
+
+### 1. **SyntaxError**
+
+Occurs when there’s an error in your syntax, like missing a parenthesis or comma.
+
+```javascript
+let x = [1, 2, 3; // SyntaxError: Unexpected token ;
+```
+
+### 2. **ReferenceError**
+
+Occurs when you try to use a variable that hasn’t been declared.
+
+```javascript
+console.log(y); // ReferenceError: y is not defined
+```
+
+### 3. **TypeError**
+
+Occurs when a variable is not the expected type.
+
+```javascript
+let num = "10";
+console.log(num.toFixed(2)); // TypeError: num.toFixed is not a function
+```
+
+### 4. **RangeError**
+
+Occurs when a number is outside the allowed range.
+
+```javascript
+let arr = new Array(-1); // RangeError: Invalid array length
+```
+
+---
+
+## Practice Challenge: Calculator with Error Handling 🎲
+
+Let’s create a small **calculator** that divides two numbers and handles errors gracefully.
+
+1. Write a `divide` function that takes two numbers.
+2. If the second number is zero, throw an error.
+3. Use `try...catch` to handle the error and display a user-friendly message.
+
+### Example Solution
+
+```javascript
+function divide(a, b) {
+    if (b === 0) {
+        throw new Error("Cannot divide by zero!");
+    }
+    return a / b;
+}
+
+try {
+    let result = divide(10, 0);
+    console.log("Result:", result);
+} catch (error) {
+    console.error("Error:", error.message);
+}
+```
+
+This code throws a custom error if the second argument is zero, and the `catch` block logs the error message.
+
+---
+
+## Wrapping Up
+
+In Part 9, we learned about **error handling** with `try...catch`, custom errors, and debugging techniques. Error handling makes your applications more resilient and reliable, and debugging skills help you troubleshoot problems effectively.
+
+In the final Part 10, we’ll cover **modular JavaScript** and best practices to organize code, helping you write cleaner and more maintainable applications. Thanks for following along, and keep up the great work! 🎉

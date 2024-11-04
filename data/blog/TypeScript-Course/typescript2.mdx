@@ -1,0 +1,240 @@
+---
+title: "Part 2: Interfaces and Type Aliases"
+summary: "In Part 2 of our TypeScript Crash Course, we dive into interfaces, type aliases, and the structure of complex types, equipping you with tools to define and organize custom types."
+date: "Nov 20 2024"
+tags: ["typescript", "interfaces", "web development", "type safety"]
+draft: true
+course: "TypeScript Crash Course"
+---
+
+Welcome back to the **TypeScript Crash Course**! 🎉 In Part 1, we explored TypeScript’s basic type annotations and saw how they make code more readable and reliable. In **Part 2**, we’re diving deeper by exploring **interfaces** and **type aliases**. These features allow us to define complex types, making it easy to structure and organize data in TypeScript. Ready to enhance your TypeScript skills? Let’s go! 🚀
+
+## Interfaces in TypeScript 🎨
+
+An **interface** in TypeScript is a way to define the structure of an object. Interfaces are a great way to set expectations for data shapes and improve readability. Let’s look at some examples.
+
+### Defining an Interface
+
+Here’s a simple `User` interface:
+
+```typescript
+interface User {
+    name: string;
+    age: number;
+    isAdmin: boolean;
+}
+
+let user: User = {
+    name: "Alice",
+    age: 25,
+    isAdmin: false
+};
+```
+
+In this example, `User` specifies that every `user` object should have a `name` (string), `age` (number), and `isAdmin` (boolean). TypeScript will alert you if you miss a property or use an incorrect type.
+
+---
+
+## Optional and Readonly Properties 🔐
+
+Interfaces allow you to define **optional properties** (using `?`) and **readonly properties** (using `readonly`).
+
+### Optional Properties
+
+Optional properties aren’t required when creating an object.
+
+```typescript
+interface Book {
+    title: string;
+    author: string;
+    publishedYear?: number; // Optional
+}
+
+let myBook: Book = {
+    title: "TypeScript Handbook",
+    author: "Microsoft"
+};
+```
+
+### Readonly Properties
+
+Readonly properties can be set when the object is created, but they can’t be modified afterward.
+
+```typescript
+interface Person {
+    readonly id: number;
+    name: string;
+}
+
+let person: Person = { id: 1, name: "Bob" };
+// person.id = 2; // Error: Cannot assign to 'id' because it is a read-only property
+```
+
+---
+
+## Extending Interfaces 🔄
+
+Interfaces can **extend** other interfaces, allowing you to create complex structures by reusing properties from other interfaces.
+
+### Example
+
+```typescript
+interface Shape {
+    color: string;
+}
+
+interface Circle extends Shape {
+    radius: number;
+}
+
+let circle: Circle = {
+    color: "red",
+    radius: 5
+};
+```
+
+In this example, `Circle` extends `Shape`, so it inherits the `color` property and adds its own `radius` property.
+
+---
+
+## Type Aliases 📝
+
+**Type aliases** are similar to interfaces but can define more than just object types. They allow us to create custom names for types, including **unions**, **intersections**, and **functions**.
+
+### Creating a Basic Type Alias
+
+```typescript
+type ID = string | number;
+
+let userID: ID = "12345"; // Can be a string
+userID = 67890; // Or a number
+```
+
+In this example, `ID` can be either a `string` or a `number`, and we use it as a type for `userID`.
+
+---
+
+## Type Aliases vs. Interfaces 🤔
+
+While **interfaces** are often used for object structures, **type aliases** offer flexibility and can handle unions, intersections, and other complex types. Here’s a comparison:
+
+- Use **interfaces** when defining the structure of an object.
+- Use **type aliases** for unions, intersections, and other flexible types.
+
+### Example: Type Alias with Union Types
+
+```typescript
+type Status = "active" | "inactive" | "suspended";
+
+function updateStatus(status: Status): void {
+    console.log(`Status updated to ${status}`);
+}
+
+updateStatus("active"); // ✅
+updateStatus("inactive"); // ✅
+// updateStatus("pending"); // ❌ Error
+```
+
+---
+
+## Combining Interfaces and Type Aliases 🧩
+
+You can combine interfaces and type aliases for greater flexibility.
+
+### Example: Union of Interfaces
+
+```typescript
+interface Cat {
+    meow: () => void;
+}
+
+interface Dog {
+    bark: () => void;
+}
+
+type Pet = Cat | Dog;
+
+function interactWithPet(pet: Pet): void {
+    if ("meow" in pet) {
+        pet.meow();
+    } else {
+        pet.bark();
+    }
+}
+```
+
+In this example, `Pet` can be either a `Cat` or a `Dog`. By checking for specific methods, we ensure the correct behavior for each type.
+
+---
+
+## Practical Example: A Product Management System 📦
+
+Let’s apply interfaces and type aliases in a **Product Management** example.
+
+1. Define a `Product` interface with `id`, `name`, `price`, and an optional `description`.
+2. Define a `Category` type alias for product categories (e.g., "Electronics", "Books").
+3. Write a function `addProduct` that takes a `Product` and a `Category`.
+
+### Example Solution
+
+```typescript
+interface Product {
+    id: number;
+    name: string;
+    price: number;
+    description?: string; // Optional
+}
+
+type Category = "Electronics" | "Books" | "Clothing";
+
+let products: Product[] = [];
+
+function addProduct(product: Product, category: Category): void {
+    products.push(product);
+    console.log(`Added ${product.name} to ${category} category.`);
+}
+
+addProduct({ id: 1, name: "Laptop", price: 999 }, "Electronics");
+console.log(products);
+```
+
+In this example, `Product` defines the structure of each product, and `Category` restricts categories to a specific set of values.
+
+---
+
+## Practice Challenge: Define a User System 🎲
+
+Let’s practice by creating a simple **User System**.
+
+1. Create a `User` interface with `username`, `email`, and an optional `age` property.
+2. Define a `Role` type alias that can be `"admin"`, `"editor"`, or `"viewer"`.
+3. Write a function `assignRole` that takes a `User` and a `Role` and logs a message.
+
+### Example Solution
+
+```typescript
+interface User {
+    username: string;
+    email: string;
+    age?: number;
+}
+
+type Role = "admin" | "editor" | "viewer";
+
+function assignRole(user: User, role: Role): void {
+    console.log(`${user.username} is assigned the role of ${role}.`);
+}
+
+const newUser: User = { username: "john_doe", email: "john@example.com" };
+assignRole(newUser, "admin"); // Output: john_doe is assigned the role of admin.
+```
+
+This example creates a `User` object, then assigns it a role using the `assignRole` function.
+
+---
+
+## Wrapping Up
+
+In Part 2 of our TypeScript series, we explored **interfaces** and **type aliases** to define complex data structures. These tools allow you to create flexible, readable code, making it easier to work with complex data in TypeScript.
+
+In Part 3, we’ll dive into **functions and generics** in TypeScript, further enhancing your ability to write reusable, robust code. Thanks for following along, and happy coding! 🎉

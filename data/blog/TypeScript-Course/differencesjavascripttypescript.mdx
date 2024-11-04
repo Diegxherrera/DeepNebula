@@ -1,0 +1,161 @@
+---
+title: "Differences between JavaScript & TypeScript"
+summary: "An introductory guide to TypeScript and how it enhances JavaScript with helpful features like static types, better error handling, and improved readability."
+date: "Nov 18 2024"
+tags: ["typescript", "javascript", "web development"]
+draft: true
+---
+
+Hey there! 👋 If you've been working with JavaScript, you might have heard about TypeScript. But what exactly is it? And why are so many developers adding it to their toolkit? In this post, we'll dive into TypeScript, explore how it enhances JavaScript, and show how it can help you write cleaner, more reliable code. Let’s get started!
+
+## A Quick Look at JavaScript 🖥️
+
+JavaScript is a powerful, flexible language that's essential for web development. From interactive websites to dynamic web applications, JavaScript has made it possible to create complex, responsive features. But JavaScript has its quirks:
+
+- **No Types**: Variables in JavaScript can change types on the fly, which is super flexible but can lead to unexpected bugs.
+- **Runtime Errors**: Many errors only show up when the code runs, which means you might not catch mistakes until your app is live. 😬
+
+Enter TypeScript! TypeScript was created to make JavaScript development safer and more predictable without sacrificing the language’s flexibility.
+
+## What is TypeScript? 📝
+
+**TypeScript** is a programming language developed by Microsoft that builds on JavaScript by adding **static types**. Think of it as JavaScript with a superhero cape 🦸‍♂️. TypeScript adds types and other helpful tools that help catch bugs before you run your code.
+
+- **JavaScript Compatible**: TypeScript is a superset of JavaScript, meaning it includes all JavaScript features and syntax. If you know JavaScript, you're already halfway there!
+- **Static Typing**: TypeScript introduces types like `string`, `number`, and `boolean`, letting you define what kind of data your variables can hold.
+- **Compile-time Error Checking**: TypeScript catches errors during the coding process, so you can fix issues early and avoid surprises later.
+- **Better Tooling**: TypeScript integrates beautifully with most IDEs, providing code completion, navigation, and refactoring tools.
+
+## Key Features of TypeScript ✨
+
+Here are some of the awesome features that make TypeScript stand out:
+
+### 1. **Type Annotations**
+
+In TypeScript, you can specify types for your variables, function parameters, and return values. This helps prevent accidental bugs and makes the code easier to read.
+
+```typescript
+let age: number = 30;
+let name: string = "Alice";
+```
+
+### 2. **Interfaces**
+
+TypeScript allows you to define the structure of objects using interfaces. This makes it easier to enforce consistent structures across your code.
+
+```typescript
+interface Person {
+  name: string;
+  age: number;
+}
+
+const person: Person = { name: "Alice", age: 25 };
+```
+
+### 3. **Enums**
+
+Enums give you a way to define a set of named values, making your code more readable and easier to maintain.
+
+```typescript
+enum Status {
+  Active,
+  Inactive,
+  Pending,
+}
+
+let userStatus: Status = Status.Active;
+```
+
+### 4. **Classes and Interfaces Together**
+
+TypeScript's object-oriented features, like classes and interfaces, make it easier to organize complex code, especially in larger projects.
+
+```typescript
+class Car {
+  brand: string;
+  model: string;
+
+  constructor(brand: string, model: string) {
+    this.brand = brand;
+    this.model = model;
+  }
+
+  drive() {
+    console.log(`${this.brand} ${this.model} is driving!`);
+  }
+}
+```
+
+## Setting Up TypeScript 🛠️
+
+Ready to give TypeScript a try? Let’s set it up! You can install TypeScript globally by running this command:
+
+```sh
+npm install -g typescript
+```
+
+To check that it’s installed, type:
+
+```sh
+tsc --version
+```
+
+Now, you’re ready to start coding with TypeScript!
+
+## Compiling TypeScript to JavaScript
+
+TypeScript code needs to be **compiled** (or "transpiled") into JavaScript for the browser to understand it. You can compile TypeScript files by running:
+
+```sh
+tsc filename.ts
+```
+
+This will create a `filename.js` file that you can run like regular JavaScript.
+
+## Example Project: A Simple Calculator 🧮
+
+Let’s create a simple calculator in TypeScript! This will show how TypeScript’s features make development smooth and error-free.
+
+1. **Create a File** named `calculator.ts`:
+
+```typescript
+function add(a: number, b: number): number {
+  return a + b;
+}
+
+function subtract(a: number, b: number): number {
+  return a - b;
+}
+
+console.log("Addition:", add(5, 10)); // 15
+console.log("Subtraction:", subtract(10, 5)); // 5
+```
+
+2. **Compile** the code:
+
+```sh
+tsc calculator.ts
+```
+
+3. **Run the Compiled JavaScript**:
+
+```sh
+node calculator.js
+```
+
+And there you have it—a simple calculator with type safety, helping to ensure you only pass numbers into our functions. TypeScript's type-checking will catch errors if you try to pass anything else!
+
+## TypeScript vs. JavaScript: Why Use TypeScript? ⚔️
+
+Here’s why TypeScript is a powerful choice:
+
+- **Error Prevention**: TypeScript’s static typing catches common mistakes early.
+- **Enhanced Readability**: Code with types is often easier to understand and navigate.
+- **Scalability**: TypeScript’s additional features make it ideal for large projects and teams.
+- **Compatibility**: Since TypeScript compiles to JavaScript, it works with any JavaScript code or library.
+
+## Wrapping Up
+
+TypeScript brings powerful features to JavaScript, making it safer, more readable, and easier to maintain, especially in larger projects. With TypeScript, you get the best of both worlds: the flexibility of JavaScript and the security of static typing. Give it a try, and you might just find that TypeScript becomes your go-to language for web development! 🚀
+
+Thanks for reading, and happy coding with TypeScript! 💻

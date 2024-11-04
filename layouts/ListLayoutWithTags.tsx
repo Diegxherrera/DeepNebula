@@ -14,7 +14,10 @@ import tagData from 'app/tag-data.json'
 interface PaginationProps {
   totalPages: number
   currentPage: number
+  courseSlug?: string // course slug for filtering if on a course page
+  isCoursePage: boolean // New: Check if filtering for course posts
 }
+
 interface ListLayoutProps {
   posts: CoreContent<Blog>[]
   title: string
@@ -22,11 +25,17 @@ interface ListLayoutProps {
   pagination?: PaginationProps
 }
 
-function Pagination({ totalPages, currentPage }: PaginationProps) {
+function Pagination({ totalPages, currentPage, isCoursePage }: PaginationProps) {
   const pathname = usePathname()
   const basePath = pathname.split('/')[1]
   const prevPage = currentPage - 1 > 0
   const nextPage = currentPage + 1 <= totalPages
+
+  // Build the URL, and add `noCourse=true` query parameter if not a course page
+  const createPageUrl = (page: number) => {
+    const pagePath = page === 1 ? `/${basePath}` : `/${basePath}/page/${page}`
+    return !isCoursePage ? `${pagePath}?noCourse=true` : pagePath
+  }
 
   return (
     <div className="space-y-2 pb-8 pt-6 md:space-y-5">
@@ -37,10 +46,7 @@ function Pagination({ totalPages, currentPage }: PaginationProps) {
           </button>
         )}
         {prevPage && (
-          <Link
-            href={currentPage - 1 === 1 ? `/${basePath}/` : `/${basePath}/page/${currentPage - 1}`}
-            rel="prev"
-          >
+          <Link href={createPageUrl(currentPage - 1)} rel="prev">
             Previous
           </Link>
         )}
@@ -53,7 +59,7 @@ function Pagination({ totalPages, currentPage }: PaginationProps) {
           </button>
         )}
         {nextPage && (
-          <Link href={`/${basePath}/page/${currentPage + 1}`} rel="next">
+          <Link href={createPageUrl(currentPage + 1)} rel="next">
             Next
           </Link>
         )}
@@ -75,20 +81,23 @@ export default function ListLayoutWithTags({
 
   const displayPosts = initialDisplayPosts.length > 0 ? initialDisplayPosts : posts
 
-  // Determine if this is a course page
+  // Determine if this is a course page or main blog page
   const isCoursePage = pathname.startsWith('/courses')
+
+  // Filter out posts that belong to a course on the main blog page
+  const filteredPosts = !isCoursePage
+    ? displayPosts.filter((post) => !post.course) // Only posts without a course
+    : displayPosts // Show all posts on course pages
 
   return (
     <>
       <div>
         <div className="pb-6 pt-6">
-          {/* Display the full title passed as a prop */}
           <h1 className="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
             {title}
           </h1>
         </div>
         <div className="flex sm:space-x-24">
-          {/* Conditionally render the tags sidebar only if it's not a course page */}
           {!isCoursePage && (
             <div className="hidden h-full max-h-screen min-w-[280px] max-w-[280px] flex-wrap overflow-auto rounded bg-gray-50 pt-5 shadow-md dark:bg-gray-900/70 dark:shadow-gray-800/40 sm:flex">
               <div className="px-6 py-4">
@@ -103,37 +112,34 @@ export default function ListLayoutWithTags({
                   </Link>
                 )}
                 <ul>
-                  {sortedTags.map((t) => {
-                    return (
-                      <li key={t} className="my-3">
-                        {decodeURI(pathname.split('/tags/')[1]) === slug(t) ? (
-                          <h3 className="inline px-3 py-2 text-sm font-bold uppercase text-primary-500">
-                            {`${t} (${tagCounts[t]})`}
-                          </h3>
-                        ) : (
-                          <Link
-                            href={`/tags/${slug(t)}`}
-                            className="px-3 py-2 text-sm font-medium uppercase text-gray-500 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-500"
-                            aria-label={`View posts tagged ${t}`}
-                          >
-                            {`${t} (${tagCounts[t]})`}
-                          </Link>
-                        )}
-                      </li>
-                    )
-                  })}
+                  {sortedTags.map((t) => (
+                    <li key={t} className="my-3">
+                      {decodeURI(pathname.split('/tags/')[1]) === slug(t) ? (
+                        <h3 className="inline px-3 py-2 text-sm font-bold uppercase text-primary-500">
+                          {`${t} (${tagCounts[t]})`}
+                        </h3>
+                      ) : (
+                        <Link
+                          href={`/tags/${slug(t)}`}
+                          className="px-3 py-2 text-sm font-medium uppercase text-gray-500 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-500"
+                          aria-label={`View posts tagged ${t}`}
+                        >
+                          {`${t} (${tagCounts[t]})`}
+                        </Link>
+                      )}
+                    </li>
+                  ))}
                 </ul>
               </div>
             </div>
           )}
           <div>
             <ul>
-              {displayPosts.map((post) => {
+              {filteredPosts.map((post) => {
                 const { path, date, title, summary, tags } = post
                 return (
                   <li key={path} className="py-5">
                     <article className="flex flex-col space-y-2 xl:space-y-0">
-                      {/* Only show date if it's NOT a course page */}
                       {!isCoursePage && (
                         <dl>
                           <dt className="sr-only">Published on</dt>
@@ -165,7 +171,11 @@ export default function ListLayoutWithTags({
               })}
             </ul>
             {pagination && pagination.totalPages > 1 && (
-              <Pagination currentPage={pagination.currentPage} totalPages={pagination.totalPages} />
+              <Pagination
+                currentPage={pagination.currentPage}
+                totalPages={pagination.totalPages}
+                isCoursePage={isCoursePage} // Pass isCoursePage to Pagination
+              />
             )}
           </div>
         </div>

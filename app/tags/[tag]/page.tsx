@@ -8,8 +8,16 @@ import { genPageMetadata } from 'app/seo'
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
+// Separate function to decode the tag and process the title
+async function getTag(tagParam: string) {
+  const tag = decodeURI(tagParam)
+  const title = tag[0].toUpperCase() + tag.split(' ').join('-').slice(1)
+  return { tag, title }
+}
+
+// Generate metadata with async handling
 export async function generateMetadata({ params }: { params: { tag: string } }): Promise<Metadata> {
-  const tag = decodeURI(params.tag)
+  const { tag } = await getTag(params.tag)
   return genPageMetadata({
     title: tag,
     description: `${siteMetadata.title} ${tag} tagged content`,
@@ -22,24 +30,31 @@ export async function generateMetadata({ params }: { params: { tag: string } }):
   })
 }
 
+// Static params generation for tags
 export const generateStaticParams = async () => {
   const tagCounts = tagData as Record<string, number>
   const tagKeys = Object.keys(tagCounts)
-  const paths = tagKeys.map((tag) => ({
+  return tagKeys.map((tag) => ({
     tag: encodeURI(tag),
   }))
-  return paths
 }
 
-export default function TagPage({ params }: { params: { tag: string } }) {
-  const tag = decodeURI(params.tag)
-  // Capitalize first letter and convert space to dash
-  const title = tag[0].toUpperCase() + tag.split(' ').join('-').slice(1)
+// Main TagPage component
+export default async function TagPage({ params }: { params: { tag: string } }) {
+  const { tag, title } = await getTag(params.tag)
+
+  // Filter posts based on the tag, excluding those with a course defined
   const filteredPosts = allCoreContent(
-    sortPosts(allBlogs.filter((post) => post.tags && post.tags.map((t) => slug(t)).includes(tag)))
+    sortPosts(
+      allBlogs.filter(
+        (post) => post.tags && post.tags.map((t) => slug(t)).includes(tag) && !post.course
+      )
+    )
   )
+
   if (filteredPosts.length === 0) {
     return notFound()
   }
+
   return <ListLayout posts={filteredPosts} title={title} />
 }

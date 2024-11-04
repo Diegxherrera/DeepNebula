@@ -66,7 +66,7 @@ Each file in `src/pages` corresponds to a route. For example, `src/pages/index.a
 
 Astro components can be defined as reusable parts of your site. A button component, for example:
 
-```astro
+```html
 ---
 // src/components/Button.astro
 const { label, onClick } = Astro.props;
@@ -79,12 +79,10 @@ const { label, onClick } = Astro.props;
 
 Astro's Islands Architecture provides advanced control over component hydration using `client:*` directives:
 
-```astro
+```html
 ---
 // src/pages/index.astro
 import MyButton from '../components/Button.astro';
-import { defineComponent } from 'astro:assets';
-
 ---
 
 <h1>Welcome to My Astro Site</h1>
@@ -147,7 +145,7 @@ Install the Svelte integration and create a live search feature that activates o
 
 Then, include it in `index.astro`:
 
-```astro
+```html
 ---
 // src/pages/index.astro
 import Search from '../components/Search.svelte';
@@ -162,7 +160,7 @@ import Search from '../components/Search.svelte';
 
 Astro includes built-in image optimization:
 
-```astro
+```html
 ---
 // src/pages/index.astro
 import { Image } from 'astro:assets';

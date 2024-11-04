@@ -1,0 +1,225 @@
+---
+title: "Part 3: Prototypes, Inheritance, and the JavaScript Object Model"
+summary: "In Part 13 of our JavaScript Crash Course (Deep Dive), we explore prototypes, inheritance, and JavaScript's object model, laying a strong foundation for the upcoming TypeScript series."
+date: "Nov 17 2024"
+tags: ["javascript", "advanced concepts", "web development", "inheritance"]
+course: "JavaScript Deep Dive"
+draft: false
+---
+
+Welcome to Part 13 of our **JavaScript Deep Dive** series! 🎉 In this part, we’re exploring **prototypes**, **inheritance**, and the **JavaScript object model**. These concepts are fundamental to understanding JavaScript's object-oriented capabilities and will lay a solid foundation for our upcoming TypeScript extension. Let’s dive into the heart of JavaScript’s unique object system! 🚀
+
+## Understanding Prototypes in JavaScript 🔍
+
+JavaScript is a **prototype-based language**, meaning objects can inherit properties from other objects. Unlike traditional class-based languages, JavaScript uses **prototypes** to create inheritance structures.
+
+Every JavaScript object has a hidden property called `[[Prototype]]`, which links it to another object. This link is what forms the **prototype chain**.
+
+### Creating and Accessing Prototypes
+
+When you create an object using an object literal or `new`, it automatically links to `Object.prototype` or the constructor’s prototype.
+
+```javascript
+let person = { name: "Alice" };
+console.log(person.__proto__ === Object.prototype); // true
+```
+
+You can access an object’s prototype using `__proto__`, although modern JavaScript prefers using `Object.getPrototypeOf()`.
+
+---
+
+## Prototype Chain and Inheritance 🔗
+
+When you try to access a property on an object, JavaScript first checks the object itself. If the property isn’t found, it moves up the **prototype chain** until it finds the property or reaches `null`.
+
+### Example of Prototype Chain
+
+```javascript
+let animal = { eats: true };
+let dog = { barks: true };
+
+dog.__proto__ = animal; // Setting animal as the prototype of dog
+
+console.log(dog.barks); // true (found on dog)
+console.log(dog.eats); // true (found on animal prototype)
+```
+
+In this example, `dog` has `animal` as its prototype, so it can access `eats` even though it’s not directly on `dog`.
+
+---
+
+## Using Constructor Functions and `new` Keyword 🛠️
+
+**Constructor functions** create new objects and automatically set their prototype.
+
+### Example: Constructor Function
+
+```javascript
+function Person(name, age) {
+    this.name = name;
+    this.age = age;
+}
+
+Person.prototype.greet = function() {
+    console.log(`Hello, my name is ${this.name}.`);
+};
+
+let john = new Person("John", 30);
+john.greet(); // Output: Hello, my name is John.
+```
+
+Explanation:
+
+1. `Person` is a constructor function that assigns `name` and `age`.
+2. Using `new` with `Person` creates an object and sets its prototype to `Person.prototype`.
+
+### The `new` Keyword
+
+When we call `new Person()`, JavaScript:
+
+1. Creates an empty object.
+2. Sets the object's `[[Prototype]]` to `Person.prototype`.
+3. Executes the constructor function with `this` bound to the new object.
+4. Returns the object.
+
+---
+
+## Modern JavaScript Classes 🎩
+
+ES6 introduced **classes** as a syntactical sugar over prototypes to make inheritance easier and more readable.
+
+### Example: Defining a Class
+
+```javascript
+class Animal {
+    constructor(name) {
+        this.name = name;
+    }
+
+    speak() {
+        console.log(`${this.name} makes a noise.`);
+    }
+}
+
+class Dog extends Animal {
+    speak() {
+        console.log(`${this.name} barks.`);
+    }
+}
+
+let rover = new Dog("Rover");
+rover.speak(); // Output: Rover barks.
+```
+
+Explanation:
+
+1. `Animal` is a base class with a `speak` method.
+2. `Dog` is a subclass of `Animal`, overriding `speak`.
+
+Classes in JavaScript are still prototype-based, but the syntax is cleaner and closer to traditional OOP languages.
+
+---
+
+## `Object.create()` and Direct Prototype Linkage 🧩
+
+JavaScript allows us to create objects with a specified prototype using `Object.create()`.
+
+### Example
+
+```javascript
+let vehicle = { wheels: 4 };
+
+let car = Object.create(vehicle);
+console.log(car.wheels); // Output: 4
+console.log(Object.getPrototypeOf(car) === vehicle); // true
+```
+
+In this example, `car` directly inherits properties from `vehicle`, making `Object.create()` useful for setting up prototype chains without constructors.
+
+---
+
+## Practical Uses of Prototypes 📌
+
+1. **Shared Methods**: Attach methods to a constructor’s prototype to save memory. Each object created will share the same method rather than creating a new one.
+
+ ```javascript
+ function User(name) {
+     this.name = name;
+ }
+
+ User.prototype.sayHi = function() {
+     console.log(`Hi, ${this.name}!`);
+ };
+
+ let user1 = new User("Alice");
+ let user2 = new User("Bob");
+
+ user1.sayHi(); // Output: Hi, Alice!
+ user2.sayHi(); // Output: Hi, Bob!
+    ```
+
+2. **Inheritance**: Set up relationships between different object types.
+
+3. **Type Checking**: Prototypes help identify types when working with complex data structures.
+
+---
+
+## `hasOwnProperty` and `in` Keyword ⚙️
+
+To check if an object has a property directly (not from its prototype), use `hasOwnProperty`.
+
+```javascript
+let cat = { fur: true };
+console.log(cat.hasOwnProperty("fur")); // true
+console.log("toString" in cat); // true (inherited from Object prototype)
+```
+
+The `in` operator checks if a property exists in the object, including inherited properties.
+
+---
+
+## Practice Challenge: Prototypal Inheritance 🎲
+
+Let’s practice setting up a simple inheritance structure.
+
+1. Create a `Vehicle` constructor that has a `type` property and a `describe` method.
+2. Create a `Car` constructor that inherits from `Vehicle`.
+3. Use the `Car` constructor to create a new car object.
+
+### Example Solution
+
+```javascript
+function Vehicle(type) {
+    this.type = type;
+}
+
+Vehicle.prototype.describe = function() {
+    console.log(`This is a ${this.type}.`);
+};
+
+function Car(make, model) {
+    Vehicle.call(this, "Car"); // Inherit Vehicle properties
+    this.make = make;
+    this.model = model;
+}
+
+Car.prototype = Object.create(Vehicle.prototype); // Inherit Vehicle methods
+Car.prototype.constructor = Car; // Correct constructor reference
+
+let myCar = new Car("Toyota", "Corolla");
+myCar.describe(); // Output: This is a Car.
+```
+
+Explanation:
+
+1. `Vehicle` is the parent constructor, and `describe` is added to `Vehicle.prototype`.
+2. `Car` is the child constructor, and we use `Vehicle.call(this, "Car")` to inherit properties.
+3. We set `Car.prototype` to `Object.create(Vehicle.prototype)` for method inheritance.
+
+---
+
+## Wrapping Up
+
+In Part 3, we explored **prototypes**, **inheritance**, and JavaScript’s **object model**. This deep dive into the mechanics of JavaScript objects is essential to understanding how JavaScript achieves inheritance and will serve as a solid foundation for TypeScript, where classes and interfaces become even more powerful.
+
+## Congratulations on completing the **JavaScript Deep Dive**! 🎉

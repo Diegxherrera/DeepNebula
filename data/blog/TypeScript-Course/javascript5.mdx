@@ -1,0 +1,205 @@
+---
+title: "Part 5: Essential Array and Object Methods"
+summary: "In Part 5 of our JavaScript Crash Course, we dive into essential array and object methods, giving you powerful tools to work with data more effectively and efficiently."
+date: "Nov 9 2024"
+tags: ["javascript", "web development"]
+course: "JavaScript Crash Course"
+draft: false
+---
+
+Welcome back to the **JavaScript Crash Course** series! 🎉 In Part 4, we explored arrays and objects—two essential data structures in JavaScript. Now, in Part 5, we’ll take things further by looking at **array and object methods**. These methods give us powerful ways to manage, transform, and access data. Ready to make data handling in JavaScript easier? Let’s go! 🚀
+
+## Array Methods 🔄
+
+JavaScript offers many built-in methods that allow us to manipulate arrays with ease. Here are some of the most useful ones:
+
+### 1. `forEach()`
+
+The `forEach()` method allows you to execute a function for each element in the array.
+
+```javascript
+let fruits = ["apple", "banana", "cherry"];
+fruits.forEach(fruit => {
+    console.log(fruit);
+});
+```
+
+### 2. `map()`
+
+`map()` creates a new array by applying a function to each element in the original array.
+
+```javascript
+let numbers = [1, 2, 3];
+let doubled = numbers.map(number => number * 2);
+console.log(doubled); // Output: [2, 4, 6]
+```
+
+### 3. `filter()`
+
+`filter()` creates a new array with only the elements that pass a certain condition.
+
+```javascript
+let ages = [12, 18, 25, 30, 14];
+let adults = ages.filter(age => age >= 18);
+console.log(adults); // Output: [18, 25, 30]
+```
+
+### 4. `reduce()`
+
+`reduce()` reduces all elements in an array to a single value, like the sum of all numbers.
+
+```javascript
+let prices = [10, 20, 30];
+let total = prices.reduce((sum, price) => sum + price, 0);
+console.log(total); // Output: 60
+```
+
+### 5. `find()`
+
+`find()` returns the first element that meets a specified condition.
+
+```javascript
+let numbers = [5, 12, 8, 130, 44];
+let found = numbers.find(num => num > 10);
+console.log(found); // Output: 12
+```
+
+### 6. `some()` and `every()`
+
+- **`some()`** checks if at least one element in the array meets a condition.
+- **`every()`** checks if all elements in the array meet a condition.
+
+```javascript
+let numbers = [1, 2, 3, 4];
+
+console.log(numbers.some(num => num > 3)); // true
+console.log(numbers.every(num => num > 0)); // true
+```
+
+---
+
+## Object Methods 🔑
+
+Objects also have useful methods for working with their properties and values. Here are some essential ones:
+
+### 1. `Object.keys()`
+
+`Object.keys()` returns an array of an object’s property names (keys).
+
+```javascript
+let person = { name: "Alice", age: 25, city: "New York" };
+console.log(Object.keys(person)); // Output: ["name", "age", "city"]
+```
+
+### 2. `Object.values()`
+
+`Object.values()` returns an array of an object’s values.
+
+```javascript
+console.log(Object.values(person)); // Output: ["Alice", 25, "New York"]
+```
+
+### 3. `Object.entries()`
+
+`Object.entries()` returns an array of key-value pairs, which can be helpful for looping over an object.
+
+```javascript
+console.log(Object.entries(person));
+// Output: [["name", "Alice"], ["age", 25], ["city", "New York"]]
+```
+
+### 4. `Object.assign()`
+
+`Object.assign()` is used to copy properties from one or more source objects to a target object.
+
+```javascript
+let target = { name: "Alice" };
+let source = { age: 25, city: "New York" };
+
+Object.assign(target, source);
+console.log(target); // Output: { name: "Alice", age: 25, city: "New York" }
+```
+
+### 5. `Object.freeze()` and `Object.seal()`
+
+- **`Object.freeze()`** prevents any changes to an object (no adding, deleting, or modifying properties).
+- **`Object.seal()`** prevents adding or deleting properties but allows modification of existing properties.
+
+```javascript
+let car = { brand: "Toyota", model: "Corolla" };
+
+Object.freeze(car);
+car.model = "Camry"; // This will have no effect
+console.log(car.model); // Output: "Corolla"
+
+Object.seal(car);
+car.model = "Camry"; // This will work because seal allows modification
+```
+
+---
+
+## Practical Example: Using Array and Object Methods 🎲
+
+Let’s create a small program to practice some of these methods.
+
+### Task: Filtering and Displaying Students
+
+1. Create an array of student objects. Each object should have a `name`, `age`, and `score`.
+2. Filter students who scored above 70 and return their names.
+3. Display the names in uppercase.
+
+Example Solution:
+
+```javascript
+let students = [
+    { name: "Alice", age: 22, score: 65 },
+    { name: "Bob", age: 25, score: 85 },
+    { name: "Charlie", age: 20, score: 75 }
+];
+
+let passedStudents = students
+    .filter(student => student.score > 70)
+    .map(student => student.name.toUpperCase());
+
+console.log(passedStudents); // Output: ["BOB", "CHARLIE"]
+```
+
+---
+
+## Practice Challenge: Analyzing Inventory 🚀
+
+Let’s put these methods to work with a small challenge involving an **inventory**:
+
+1. Create an array of product objects, each with `name`, `price`, and `quantity` properties.
+2. Write a function to calculate the **total inventory value** (price multiplied by quantity for each item).
+3. Find the names of products where `quantity` is less than 5.
+4. Use `map()` to display the names of these low-stock products in uppercase.
+
+Example Solution:
+
+```javascript
+let inventory = [
+    { name: "Laptop", price: 1000, quantity: 4 },
+    { name: "Mouse", price: 25, quantity: 10 },
+    { name: "Keyboard", price: 50, quantity: 3 },
+];
+
+// 2. Calculate total inventory value
+let totalValue = inventory.reduce((sum, product) => sum + (product.price * product.quantity), 0);
+console.log("Total Inventory Value:", totalValue); // Output: Total Inventory Value: 4275
+
+// 3 & 4. Find and display low-stock products
+let lowStockProducts = inventory
+    .filter(product => product.quantity < 5)
+    .map(product => product.name.toUpperCase());
+
+console.log("Low Stock Products:", lowStockProducts); // Output: ["LAPTOP", "KEYBOARD"]
+```
+
+---
+
+## Wrapping Up
+
+In Part 5, we covered some of the most powerful array and object methods in JavaScript. With these methods, you can handle data more effectively, filter and transform arrays, and manage object properties with ease. Mastering these will make you much more efficient in JavaScript.
+
+Stay tuned for Part 6, where we’ll dive into **DOM manipulation** and learn how JavaScript can interact with HTML and CSS to create dynamic web pages! Thanks for reading, and happy coding! 🎉

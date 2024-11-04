@@ -1,0 +1,215 @@
+---
+title: "Part 7: Advanced Event Handling and Delegation"
+summary: "In Part 7 of our JavaScript Crash Course, we dive deeper into event handling, covering advanced techniques like event delegation and multiple event types to create more efficient and responsive code."
+date: "Nov 11 2024"
+tags: ["javascript", "web development", "events"]
+course: "JavaScript Crash Course"
+draft: false
+---
+
+Welcome back to the **JavaScript Crash Course** series! 🎉 In Part 6, we learned how to interact with the DOM and respond to user actions using **event listeners**. Now, in Part 7, we’re going to dive deeper into event handling. Specifically, we’ll cover **advanced event handling** techniques like event delegation and multiple event types. These skills will help make your code more efficient and responsive. Let’s get started! 🚀
+
+## Refresh: What are Events? 🎯
+
+An **event** in JavaScript is an action or occurrence—like a click, mouse movement, or keyboard press—that JavaScript can respond to. Events allow us to make our web pages interactive, listening for user actions and executing code in response.
+
+---
+
+## Understanding Event Propagation 🪜
+
+When an event happens on an element, like a button click, it doesn’t just affect that element. The event propagates through the DOM in two phases:
+
+1. **Capturing Phase**: The event moves from the root to the target element.
+2. **Bubbling Phase**: After reaching the target, the event "bubbles" back up to the root.
+
+By default, most events are in the **bubbling phase** when they are handled. You can specify which phase to use, but knowing about event propagation helps understand the next topic: **event delegation**.
+
+---
+
+## Event Delegation 🎳
+
+**Event delegation** is a technique where you attach a single event listener to a parent element to handle events from multiple child elements. Instead of adding event listeners to each item individually, we can take advantage of event bubbling.
+
+### Why Use Event Delegation?
+
+- **Efficiency**: Reduces the number of event listeners, improving performance.
+- **Dynamic Elements**: Useful for handling events on elements created dynamically.
+
+### Example of Event Delegation
+
+Imagine we have a list of items, and we want to add a click event to each item. Instead of adding an event listener to each item, we can add one to the parent and use **event delegation**:
+
+```html
+<ul id="itemList">
+    <li>Item 1</li>
+    <li>Item 2</li>
+    <li>Item 3</li>
+</ul>
+```
+
+```javascript
+let itemList = document.getElementById("itemList");
+
+itemList.addEventListener("click", (event) => {
+    if (event.target.tagName === "LI") {
+        console.log("You clicked:", event.target.innerText);
+    }
+});
+```
+
+In this example, we add a single event listener to the `ul` element. When any `li` element inside `ul` is clicked, we check if the target is an `li` and log its text. This way, we only need one event listener, even if new items are added to the list.
+
+---
+
+## Preventing Default Actions
+
+Some HTML elements, like links and forms, have default behaviors. For example, clicking a link navigates to a new page. You can prevent these default actions with `event.preventDefault()`.
+
+```html
+<a href="https://example.com" id="myLink">Click me</a>
+```
+
+```javascript
+let link = document.getElementById("myLink");
+link.addEventListener("click", (event) => {
+    event.preventDefault();
+    console.log("Link was clicked, but default action prevented!");
+});
+```
+
+In this example, clicking the link won’t navigate to a new page because we used `preventDefault()`.
+
+---
+
+## Handling Multiple Event Types 🖱️⌨️
+
+Sometimes, you want to perform similar actions for multiple events, like handling both `click` and `keydown`. You can do this by attaching multiple event listeners, or combining logic within a single function.
+
+```html
+<button id="myButton">Click or Press Enter</button>
+```
+
+```javascript
+let button = document.getElementById("myButton");
+
+button.addEventListener("click", handleEvent);
+document.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") handleEvent(event);
+});
+
+function handleEvent(event) {
+    console.log("Button activated by", event.type);
+}
+```
+
+In this example, clicking the button or pressing Enter will trigger the `handleEvent` function.
+
+---
+
+## Event Throttling and Debouncing 🕰️
+
+When dealing with events like `scroll` or `resize` that can trigger frequently, **throttling** and **debouncing** help control how often the event fires, improving performance.
+
+### Throttling
+
+**Throttling** ensures an event fires at most once every specified interval.
+
+```javascript
+function throttle(callback, limit) {
+    let wait = false;
+    return function() {
+        if (!wait) {
+            callback.apply(null, arguments);
+            wait = true;
+            setTimeout(() => {
+                wait = false;
+            }, limit);
+        }
+    };
+}
+
+window.addEventListener("resize", throttle(() => {
+    console.log("Resizing...");
+}, 500));
+```
+
+### Debouncing
+
+**Debouncing** delays the execution until the event hasn’t fired for a specified time.
+
+```javascript
+function debounce(callback, delay) {
+    let timeout;
+    return function() {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            callback.apply(null, arguments);
+        }, delay);
+    };
+}
+
+window.addEventListener("scroll", debounce(() => {
+    console.log("Scrolling stopped");
+}, 200));
+```
+
+---
+
+## Practice Challenge: Click Tracker 🎯
+
+Let’s practice advanced event handling with a **Click Tracker**:
+
+1. Create a button that, when clicked, logs "Button clicked!" only once every 1 second (using throttling).
+2. Create a text input field that logs each key pressed after the user stops typing for 300ms (using debouncing).
+
+### Example Solution
+
+```html
+<button id="clickButton">Click me!</button>
+<input type="text" id="typeInput" placeholder="Type here" />
+
+<script>
+    function throttle(callback, limit) {
+        let wait = false;
+        return function() {
+            if (!wait) {
+                callback.apply(null, arguments);
+                wait = true;
+                setTimeout(() => {
+                    wait = false;
+                }, limit);
+            }
+        };
+    }
+
+    function debounce(callback, delay) {
+        let timeout;
+        return function() {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                callback.apply(null, arguments);
+            }, delay);
+        };
+    }
+
+    // Throttle example for button clicks
+    const clickButton = document.getElementById("clickButton");
+    clickButton.addEventListener("click", throttle(() => {
+        console.log("Button clicked!");
+    }, 1000));
+
+    // Debounce example for typing input
+    const typeInput = document.getElementById("typeInput");
+    typeInput.addEventListener("input", debounce(() => {
+        console.log("User stopped typing:", typeInput.value);
+    }, 300));
+</script>
+```
+
+---
+
+## Wrapping Up
+
+In this part, we explored **advanced event handling** with event delegation, handling multiple event types, and optimizing performance with throttling and debouncing. Mastering these concepts will make your JavaScript code more responsive, efficient, and scalable.
+
+In Part 8, we’ll dive into **asynchronous JavaScript** and learn how to handle tasks that take time, like fetching data from a server. Stay tuned, and happy coding! 🎉

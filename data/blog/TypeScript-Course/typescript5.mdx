@@ -1,0 +1,268 @@
+---
+title: "Part 5: Type Guards, Enums, and Advanced Type Manipulation"
+summary: "In Part 5 of our TypeScript Crash Course, we explore type guards, enums, and advanced type manipulation techniques to give you deeper control over type management in TypeScript."
+date: "Nov 23 2024"
+tags: ["typescript", "type guards", "web development", "advanced types"]
+draft: true
+course: "TypeScript Crash Course"
+---
+
+Welcome to the final part of the **TypeScript Crash Course**! 🎉 Over the past lessons, we’ve covered TypeScript’s core features, from basic types to generics and complex type scenarios. In **Part 5**, we’ll wrap up by exploring **type guards**, **enums**, and **advanced type manipulation techniques**—tools that provide greater control and flexibility in type management. Let’s finish strong! 🚀
+
+## Type Guards in TypeScript 🛡️
+
+**Type guards** allow us to narrow down types in a conditional way, giving TypeScript clues about the specific type we’re working with. Type guards improve safety and readability by allowing us to handle different types precisely.
+
+### Using `typeof` for Type Guards
+
+We can use `typeof` for primitive types like `string`, `number`, and `boolean`.
+
+```typescript
+function formatInput(input: string | number) {
+    if (typeof input === "string") {
+        return input.toUpperCase();
+    } else {
+        return input.toFixed(2);
+    }
+}
+
+console.log(formatInput("hello")); // Output: HELLO
+console.log(formatInput(3.14159)); // Output: 3.14
+```
+
+### Using `instanceof` for Type Guards
+
+`instanceof` is useful for checking class instances.
+
+```typescript
+class Dog {
+    bark() {
+        console.log("Woof!");
+    }
+}
+
+class Cat {
+    meow() {
+        console.log("Meow!");
+    }
+}
+
+function makeSound(animal: Dog | Cat) {
+    if (animal instanceof Dog) {
+        animal.bark();
+    } else {
+        animal.meow();
+    }
+}
+
+makeSound(new Dog()); // Output: Woof!
+makeSound(new Cat()); // Output: Meow!
+```
+
+---
+
+## Custom Type Guards 🔍
+
+We can create **custom type guard functions** to check complex types. Custom type guards return a boolean, helping TypeScript narrow down types.
+
+### Example: Custom Type Guard
+
+```typescript
+interface Fish {
+    swim: () => void;
+}
+
+interface Bird {
+    fly: () => void;
+}
+
+function isFish(animal: Fish | Bird): animal is Fish {
+    return (animal as Fish).swim !== undefined;
+}
+
+function move(animal: Fish | Bird) {
+    if (isFish(animal)) {
+        animal.swim();
+    } else {
+        animal.fly();
+    }
+}
+```
+
+In this example, `isFish` checks if `animal` has a `swim` property, allowing us to safely call `swim` or `fly` based on the result.
+
+---
+
+## Working with Enums 🎨
+
+**Enums** (short for "enumerated types") allow us to define a set of named constants. Enums make it easier to handle fixed sets of values, like days of the week or user roles.
+
+### Numeric Enums
+
+Numeric enums start with a default value of `0`, but you can specify other starting points.
+
+```typescript
+enum Direction {
+    North,
+    South,
+    East,
+    West
+}
+
+let heading: Direction = Direction.North;
+console.log(heading); // Output: 0
+```
+
+### String Enums
+
+String enums allow you to assign string values directly.
+
+```typescript
+enum Status {
+    Active = "ACTIVE",
+    Inactive = "INACTIVE",
+    Pending = "PENDING"
+}
+
+function updateStatus(status: Status) {
+    console.log(`Status updated to ${status}`);
+}
+
+updateStatus(Status.Active); // Output: Status updated to ACTIVE
+```
+
+Enums improve readability by giving meaningful names to sets of related values.
+
+---
+
+## Advanced Type Manipulation Techniques 🔄
+
+TypeScript offers advanced tools to create more complex types and manage type relationships, such as `keyof`, `typeof`, `Mapped Types`, and **Conditional Types**.
+
+### `keyof` Operator
+
+The `keyof` operator creates a union of all property keys in a type.
+
+```typescript
+interface Person {
+    name: string;
+    age: number;
+}
+
+type PersonKeys = keyof Person; // "name" | "age"
+
+let key: PersonKeys = "name"; // Valid
+// key = "address"; // ❌ Error: Type '"address"' is not assignable to type '"name" | "age"'.
+```
+
+### `typeof` Operator
+
+The `typeof` operator lets you extract types from variables or constants.
+
+```typescript
+let greeting = "Hello, TypeScript";
+type GreetingType = typeof greeting; // string
+
+let message: GreetingType = "Welcome!";
+```
+
+### Mapped Types
+
+**Mapped types** allow you to create new types based on existing types. For example, you can make all properties in a type optional or readonly.
+
+```typescript
+interface Task {
+    title: string;
+    completed: boolean;
+}
+
+type OptionalTask = {
+    [P in keyof Task]?: Task[P];
+};
+
+let task: OptionalTask = {}; // All properties are optional
+```
+
+### Conditional Types
+
+**Conditional types** provide a way to create types based on conditions.
+
+```typescript
+type IsString<T> = T extends string ? "Yes" : "No";
+
+type A = IsString<string>; // "Yes"
+type B = IsString<number>; // "No"
+```
+
+In this example, `IsString` checks if a type extends `string` and returns `"Yes"` or `"No"` accordingly.
+
+---
+
+## Practical Example: Role-Based Access Control 🎯
+
+Let’s combine enums and type guards for a **role-based access control** system.
+
+1. Define an enum `Role` with values `"Admin"`, `"Editor"`, and `"Viewer"`.
+2. Define a function `canEdit` that accepts a `Role` and returns `true` if the role is `Admin` or `Editor`, and `false` otherwise.
+
+### Example Solution
+
+```typescript
+enum Role {
+    Admin = "Admin",
+    Editor = "Editor",
+    Viewer = "Viewer"
+}
+
+function canEdit(role: Role): boolean {
+    return role === Role.Admin || role === Role.Editor;
+}
+
+console.log(canEdit(Role.Admin)); // Output: true
+console.log(canEdit(Role.Viewer)); // Output: false
+```
+
+In this example, `canEdit` checks if the role has editing privileges, providing a type-safe way to manage access.
+
+---
+
+## Practice Challenge: Dynamic Property Access 🎲
+
+Let’s practice **dynamic property access** using `keyof` and custom types.
+
+1. Define an interface `Settings` with properties `theme` (string), `notifications` (boolean), and `privacy` (string).
+2. Create a function `getSetting` that accepts an object of type `Settings` and a key of type `keyof Settings`.
+3. The function should return the value of the specified key.
+
+### Example Solution
+
+```typescript
+interface Settings {
+    theme: string;
+    notifications: boolean;
+    privacy: string;
+}
+
+function getSetting<T extends keyof Settings>(settings: Settings, key: T): Settings[T] {
+    return settings[key];
+}
+
+const userSettings: Settings = {
+    theme: "dark",
+    notifications: true,
+    privacy: "private"
+};
+
+console.log(getSetting(userSettings, "theme")); // Output: dark
+console.log(getSetting(userSettings, "notifications")); // Output: true
+```
+
+This example uses `keyof` to dynamically access properties in a type-safe manner.
+
+---
+
+## Wrapping Up
+
+In Part 5, we covered **type guards**, **enums**, and advanced type manipulation techniques, including `keyof`, `typeof`, mapped types, and conditional types. With these tools, you have powerful ways to handle complex type scenarios, giving you deeper control over type management in TypeScript.
+
+Congratulations on completing the TypeScript Crash Course! 🎉

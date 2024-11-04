@@ -1,0 +1,241 @@
+---
+title: "Part 2: The Event Loop and Asynchronous JavaScript"
+summary: "In Part 12 of our JavaScript Crash Course (Deep Dive), we take a deep dive into JavaScript's event loop, understanding how asynchronous code, tasks, and promises are handled in the JavaScript runtime."
+date: "Nov 16 2024"
+tags: ["javascript", "web development", "advanced concepts", "async"]
+course: "JavaScript Deep Dive"
+draft: false
+---
+
+Welcome back to the **JavaScript Deep Dive**! 🎉 In Part 1, we explored closures and the execution context. Today, in Part 2, we’re diving into a fundamental part of JavaScript's runtime: the **event loop**. Understanding the event loop is key to mastering asynchronous programming, making it possible to handle tasks like data fetching, timers, and user interactions without blocking the main thread. Let’s break down how this magic works! 🚀
+
+## What is the Event Loop? 🔄
+
+JavaScript is single-threaded, meaning it can only execute one task at a time. But thanks to the **event loop**, JavaScript can handle asynchronous tasks by managing when they’re executed.
+
+The event loop is the mechanism that allows JavaScript to handle **synchronous** and **asynchronous** code efficiently by managing the call stack, task queue, and microtask queue.
+
+---
+
+## How the Call Stack Works 📚
+
+JavaScript code is executed in the **call stack**. When you invoke a function, it’s pushed onto the stack; when it completes, it’s popped off.
+
+### Example of the Call Stack
+
+```javascript
+function first() {
+    console.log("First function");
+}
+
+function second() {
+    first();
+    console.log("Second function");
+}
+
+second();
+```
+
+Execution sequence:
+
+1. `second()` is called and pushed onto the stack.
+2. Inside `second`, `first()` is called, so it’s added to the stack.
+3. `first()` completes and is removed, followed by `second()`.
+
+But what about asynchronous tasks, like `setTimeout()`? This is where the **event loop** and task queues come into play.
+
+---
+
+## Task Queue and Microtask Queue 🕰️
+
+Asynchronous tasks like `setTimeout`, Promises, and `fetch` calls are handled outside the call stack, in the **task queue** or **microtask queue**.
+
+### Task Queue
+
+Tasks in the task queue are handled by the browser (e.g., timers, click events, or API calls) and are only moved to the call stack when the stack is empty.
+
+### Microtask Queue
+
+The microtask queue has higher priority than the task queue. Promises, `async/await`, and `MutationObserver` tasks are pushed here. The event loop checks the microtask queue before moving on to the task queue.
+
+---
+
+## The Event Loop in Action 🔄
+
+The event loop follows this cycle:
+
+1. Check the call stack.
+2. If empty, check the microtask queue and push tasks to the stack.
+3. If the microtask queue is empty, check the task queue.
+4. Repeat.
+
+### Example: Understanding the Order of Execution
+
+```javascript
+console.log("Start");
+
+setTimeout(() => {
+    console.log("Task queue: Timeout callback");
+}, 0);
+
+Promise.resolve().then(() => {
+    console.log("Microtask queue: Promise callback");
+});
+
+console.log("End");
+```
+
+**Expected Output:**
+
+```
+Start
+End
+Microtask queue: Promise callback
+Task queue: Timeout callback
+```
+
+Explanation:
+
+1. `Start` and `End` execute first since they’re synchronous.
+2. The Promise callback goes to the microtask queue, which has priority.
+3. The `setTimeout` callback goes to the task queue and runs last.
+
+---
+
+## Async and Await in the Event Loop ⏳
+
+`async` and `await` are built on promises, so they follow the same rules of the microtask queue. The `await` keyword pauses the function’s execution, but it doesn’t block the event loop.
+
+### Example
+
+```javascript
+async function fetchData() {
+    console.log("Fetching data...");
+    let data = await new Promise((resolve) =>
+        setTimeout(() => resolve("Data loaded"), 1000)
+    );
+    console.log(data);
+}
+
+console.log("Start");
+fetchData();
+console.log("End");
+```
+
+**Expected Output:**
+
+```
+Start
+Fetching data...
+End
+Data loaded
+```
+
+Explanation:
+
+1. `Start` logs first, then `fetchData` is called, logging `Fetching data...`.
+2. The `await` line pauses the function but doesn’t block the event loop.
+3. `End` logs next, and then `Data loaded` logs after 1 second.
+
+---
+
+## Visualizing the Event Loop 🔍
+
+To better understand, imagine:
+
+1. **Call Stack**: Active functions waiting to complete (e.g., `console.log`, `fetchData`).
+2. **Microtask Queue**: Higher priority queue for promises and async callbacks.
+3. **Task Queue**: Lower priority queue for `setTimeout`, `setInterval`, and other events.
+
+The event loop checks the stack and then each queue in priority order, allowing asynchronous tasks to be handled smoothly.
+
+---
+
+## Practical Example: Event Loop Timing with setTimeout 🎲
+
+Let’s try a practical example to illustrate the event loop further. We’ll see how different timer delays affect the output.
+
+```javascript
+console.log("1");
+
+setTimeout(() => {
+    console.log("2: Timeout 0ms");
+}, 0);
+
+Promise.resolve().then(() => {
+    console.log("3: Promise resolved");
+});
+
+setTimeout(() => {
+    console.log("4: Timeout 10ms");
+}, 10);
+
+console.log("5");
+```
+
+**Expected Output:**
+
+```
+1
+5
+3: Promise resolved
+2: Timeout 0ms
+4: Timeout 10ms
+```
+
+Explanation:
+
+1. `1` and `5` log immediately.
+2. The promise logs next because microtasks have priority over the task queue.
+3. The 0ms timeout follows, then the 10ms timeout.
+
+---
+
+## Practice Challenge: Sequence Puzzle 🔄
+
+Let’s solidify our understanding with a small challenge:
+
+1. Predict the output of the following code.
+
+```javascript
+console.log("A");
+
+setTimeout(() => {
+    console.log("B");
+}, 100);
+
+Promise.resolve().then(() => {
+    console.log("C");
+});
+
+console.log("D");
+
+setTimeout(() => {
+    console.log("E");
+}, 0);
+```
+
+### Expected Solution
+
+```
+A
+D
+C
+E
+B
+```
+
+Explanation:
+
+- `A` and `D` log immediately.
+- The Promise logs `C` next, as it’s in the microtask queue.
+- The 0ms timeout logs `E` next.
+- The 100ms timeout logs `B` last.
+
+---
+
+## Wrapping Up
+
+In Part 2, we took an in-depth look at JavaScript’s **event loop**, understanding how the runtime handles synchronous and asynchronous tasks with the call stack, task queue, and microtask queue. With these insights, you’ll be better equipped to write efficient and bug-free asynchronous code.
+
+In Part 3, we’ll dive into JavaScript’s **prototypes, inheritance, and object model**—essential concepts for understanding JavaScript’s core functionality and preparing for TypeScript. Thanks for following along, and happy coding! 🎉

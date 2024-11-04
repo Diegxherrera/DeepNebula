@@ -1,0 +1,221 @@
+---
+title: "Part 3: Functions and Generics"
+summary: "In Part 3 of our TypeScript Crash Course, we explore functions and generics, learning how to write reusable, type-safe functions and enhance flexibility in TypeScript."
+date: "Nov 21 2024"
+tags: ["typescript", "functions", "generics", "web development"]
+draft: true
+course: "TypeScript Crash Course"
+---
+
+Welcome back to the **TypeScript Crash Course**! 🎉 In Part 2, we covered **interfaces** and **type aliases** for defining complex data structures. In **Part 3**, we’ll dive into functions and generics—two essential aspects of TypeScript that enable us to write reusable, type-safe code. Generics, in particular, add flexibility to our code, making it adaptable for different data types while maintaining type safety. Let’s get started! 🚀
+
+## Function Types in TypeScript 🛠️
+
+In TypeScript, we can specify the types for function parameters and return values, helping catch errors early and making functions more predictable.
+
+### Example: Basic Function Type Annotations
+
+```typescript
+function greet(name: string): string {
+    return `Hello, ${name}!`;
+}
+
+console.log(greet("Alice")); // Output: Hello, Alice!
+// greet(123); // ❌ Error: Argument of type 'number' is not assignable to parameter of type 'string'.
+```
+
+### Optional and Default Parameters
+
+TypeScript allows **optional parameters** (using `?`) and **default values** for function parameters.
+
+```typescript
+function greet(name: string, greeting: string = "Hello"): string {
+    return `${greeting}, ${name}!`;
+}
+
+console.log(greet("Alice")); // Output: Hello, Alice!
+console.log(greet("Bob", "Hi")); // Output: Hi, Bob!
+```
+
+In this example, `greeting` is optional with a default value of `"Hello"`.
+
+---
+
+## Function Types and Call Signatures 🔍
+
+We can use **function types** to define the signature of a function, which is particularly useful when passing functions as parameters.
+
+### Example: Function Type
+
+```typescript
+type MathOperation = (a: number, b: number) => number;
+
+const add: MathOperation = (x, y) => x + y;
+const multiply: MathOperation = (x, y) => x * y;
+
+console.log(add(5, 3)); // Output: 8
+console.log(multiply(5, 3)); // Output: 15
+```
+
+Here, `MathOperation` defines the type of a function that takes two numbers and returns a number.
+
+---
+
+## Introduction to Generics 📦
+
+**Generics** allow us to define functions, interfaces, or classes that work with any data type. They’re a powerful feature in TypeScript for creating reusable and flexible components.
+
+### Basic Syntax of Generics
+
+In TypeScript, generics are defined with angle brackets (`<T>`) where `T` represents a **type variable**. You can name this type variable anything, but `T` is a common convention.
+
+### Example: Generic Function
+
+```typescript
+function identity<T>(value: T): T {
+    return value;
+}
+
+console.log(identity<string>("Hello")); // Output: Hello
+console.log(identity<number>(42)); // Output: 42
+```
+
+In this example, `identity` takes a parameter of type `T` and returns a value of the same type `T`. When calling `identity`, we specify the type (`<string>` or `<number>`), making it adaptable to different types.
+
+---
+
+## Working with Generic Constraints 🔒
+
+Sometimes, you want to restrict the types that can be used with generics. **Constraints** allow us to specify that a generic type must adhere to certain conditions.
+
+### Example: Using Constraints
+
+```typescript
+interface HasLength {
+    length: number;
+}
+
+function logLength<T extends HasLength>(item: T): void {
+    console.log(item.length);
+}
+
+logLength("Hello"); // Output: 5 (string has a length property)
+logLength([1, 2, 3]); // Output: 3 (array has a length property)
+// logLength(42); // ❌ Error: Argument of type 'number' is not assignable to parameter of type 'HasLength'.
+```
+
+In this example, `logLength` only accepts types that have a `length` property (like `string` and `array`). This way, TypeScript ensures that `item.length` is valid.
+
+---
+
+## Generic Interfaces and Classes 🧩
+
+Generics can also be applied to interfaces and classes, allowing for more flexible data structures.
+
+### Generic Interface Example
+
+```typescript
+interface Box<T> {
+    contents: T;
+}
+
+let stringBox: Box<string> = { contents: "Hello" };
+let numberBox: Box<number> = { contents: 123 };
+
+console.log(stringBox.contents); // Output: Hello
+console.log(numberBox.contents); // Output: 123
+```
+
+In this example, `Box<T>` is a generic interface that stores a value of type `T`. We create `stringBox` and `numberBox` using different types.
+
+### Generic Class Example
+
+```typescript
+class Pair<T, U> {
+    constructor(public first: T, public second: U) {}
+}
+
+let pair = new Pair("Alice", 30);
+console.log(pair.first); // Output: Alice
+console.log(pair.second); // Output: 30
+```
+
+Here, `Pair<T, U>` is a generic class that holds two properties of potentially different types.
+
+---
+
+## Practical Example: Data Wrapper 📦
+
+Let’s put generics to practical use by creating a **data wrapper** function that can wrap any type of data.
+
+1. Define a generic interface `Wrapper<T>` with a single property, `value`, of type `T`.
+2. Write a function `wrap` that takes a value of type `T` and returns a `Wrapper<T>`.
+
+### Example Solution
+
+```typescript
+interface Wrapper<T> {
+    value: T;
+}
+
+function wrap<T>(value: T): Wrapper<T> {
+    return { value };
+}
+
+let wrappedString = wrap("Hello, TypeScript");
+let wrappedNumber = wrap(100);
+
+console.log(wrappedString); // Output: { value: 'Hello, TypeScript' }
+console.log(wrappedNumber); // Output: { value: 100 }
+```
+
+In this example, `wrap` creates a generic wrapper around any value, making it adaptable for different types.
+
+---
+
+## Practice Challenge: Flexible Storage 🎲
+
+Let’s practice with a **flexible storage** class.
+
+1. Create a generic class `Storage<T>` that can store a single value of any type.
+2. Add `getItem` and `setItem` methods to retrieve and set the value.
+3. Test the class with different types.
+
+### Example Solution
+
+```typescript
+class Storage<T> {
+    private item: T;
+
+    constructor(item: T) {
+        this.item = item;
+    }
+
+    getItem(): T {
+        return this.item;
+    }
+
+    setItem(item: T): void {
+        this.item = item;
+    }
+}
+
+const stringStorage = new Storage<string>("Initial String");
+console.log(stringStorage.getItem()); // Output: Initial String
+
+stringStorage.setItem("Updated String");
+console.log(stringStorage.getItem()); // Output: Updated String
+
+const numberStorage = new Storage<number>(42);
+console.log(numberStorage.getItem()); // Output: 42
+```
+
+In this example, `Storage<T>` can store and manage values of different types, providing a flexible and reusable storage solution.
+
+---
+
+## Wrapping Up
+
+In Part 3 of our TypeScript series, we explored **function types** and **generics**, two powerful tools for writing reusable and type-safe code. Generics give your code flexibility, allowing you to work with multiple types while maintaining TypeScript’s type-checking benefits.
+
+In Part 4, we’ll explore **type assertions, unions, and intersections** to gain even more control over type management in TypeScript. Thanks for following along, and happy coding! 🎉

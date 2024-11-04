@@ -1,0 +1,243 @@
+---
+title: "Part 6: Manipulating the DOM"
+summary: "In Part 6 of our JavaScript Crash Course, we dive into DOM manipulation, learning how to dynamically update and interact with web pages using JavaScript."
+date: "Nov 10 2024"
+tags: ["javascript", "web development", "DOM", "html"]
+course: "JavaScript Crash Course"
+draft: false
+---
+
+Welcome back to our **JavaScript Crash Course** series! 🎉 So far, we've explored many programming fundamentals, like functions, arrays, objects, and methods to work with them. Now, in Part 6, we’re going to dive into **DOM manipulation**. DOM (Document Object Model) manipulation is what makes web pages dynamic and interactive. Ready to start making your web pages come to life? Let’s go! 🚀
+
+## What is the DOM? 🌐
+
+The **Document Object Model (DOM)** is a representation of the HTML structure of a web page. When a browser loads an HTML document, it creates a model of that document, which JavaScript can access and modify. Using JavaScript, you can dynamically change the content, structure, and style of the webpage.
+
+Think of the DOM as a tree structure where each HTML element is a node. By manipulating these nodes, we can change the way the page looks and behaves.
+
+---
+
+## Selecting Elements in the DOM 🎯
+
+To manipulate the DOM, we first need to **select** the elements we want to change. JavaScript provides several methods for this:
+
+### 1. `getElementById()`
+
+Selects an element by its `id` attribute.
+
+```html
+<div id="myElement">Hello!</div>
+```
+
+```javascript
+let element = document.getElementById("myElement");
+console.log(element); // Output: <div id="myElement">Hello!</div>
+```
+
+### 2. `getElementsByClassName()`
+
+Selects all elements with a specific class. It returns a **HTMLCollection**, which is similar to an array.
+
+```html
+<div class="item">Item 1</div>
+<div class="item">Item 2</div>
+```
+
+```javascript
+let items = document.getElementsByClassName("item");
+console.log(items[0]); // Output: <div class="item">Item 1</div>
+```
+
+### 3. `querySelector()` and `querySelectorAll()`
+
+- `querySelector()` selects the **first** element that matches a CSS selector.
+- `querySelectorAll()` selects **all elements** that match a CSS selector.
+
+```html
+<div class="item">Item 1</div>
+<div class="item">Item 2</div>
+```
+
+```javascript
+let firstItem = document.querySelector(".item");
+console.log(firstItem); // Output: <div class="item">Item 1</div>
+
+let allItems = document.querySelectorAll(".item");
+console.log(allItems); // Output: NodeList(2) [div.item, div.item]
+```
+
+---
+
+## Modifying Elements 🎨
+
+Once we've selected an element, we can modify its content, attributes, and styles.
+
+### Changing Content
+
+You can update the inner text or HTML of an element.
+
+```javascript
+let element = document.getElementById("myElement");
+element.innerText = "New Text!"; // Updates only the text content
+element.innerHTML = "<strong>Bold Text!</strong>"; // Adds HTML inside
+```
+
+### Changing Attributes
+
+Use `setAttribute()` and `getAttribute()` to change or retrieve attributes.
+
+```html
+<img id="myImage" src="old-image.jpg" />
+```
+
+```javascript
+let image = document.getElementById("myImage");
+image.setAttribute("src", "new-image.jpg"); // Changes the src attribute
+```
+
+### Changing Styles
+
+You can modify the `style` property of an element to apply CSS directly.
+
+```javascript
+let element = document.getElementById("myElement");
+element.style.color = "blue";
+element.style.fontSize = "20px";
+```
+
+---
+
+## Creating and Removing Elements 🛠️
+
+JavaScript allows you to add new elements to the DOM or remove existing ones.
+
+### Creating an Element
+
+1. Use `document.createElement()` to create a new element.
+2. Set its content or attributes as needed.
+3. Add it to the DOM using `appendChild()` or `insertBefore()`.
+
+```javascript
+let newElement = document.createElement("p");
+newElement.innerText = "I'm a new paragraph!";
+document.body.appendChild(newElement); // Adds to the end of the body
+```
+
+### Removing an Element
+
+To remove an element, use the `removeChild()` method on its parent.
+
+```html
+<div id="container">
+    <p id="paragraph">Remove me!</p>
+</div>
+```
+
+```javascript
+let container = document.getElementById("container");
+let paragraph = document.getElementById("paragraph");
+container.removeChild(paragraph); // Removes the paragraph
+```
+
+---
+
+## Event Listeners 🎉
+
+**Event listeners** allow JavaScript to listen for user interactions, like clicks, typing, or mouse movements, and respond to them. This is how we make our pages interactive.
+
+### Adding an Event Listener
+
+To add an event listener, use the `addEventListener()` method.
+
+```html
+<button id="myButton">Click me!</button>
+```
+
+```javascript
+let button = document.getElementById("myButton");
+button.addEventListener("click", () => {
+    alert("Button was clicked!");
+});
+```
+
+In this example, clicking the button will trigger an alert.
+
+### Common Events
+
+Some popular events include:
+
+- `click`: When an element is clicked.
+- `mouseover`: When the mouse hovers over an element.
+- `mouseout`: When the mouse leaves an element.
+- `input`: When the user types in an input field.
+- `submit`: When a form is submitted.
+
+---
+
+## Practice Challenge: Interactive To-Do List 📝
+
+Let's build a simple **interactive to-do list** using DOM manipulation and events!
+
+1. Create an HTML structure with an input field, a button, and an empty list.
+2. Write JavaScript to add new tasks to the list when the button is clicked.
+3. Add a "Remove" button next to each task to delete it when clicked.
+
+### Example Solution
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+</head>
+<body>
+    <input type="text" id="taskInput" placeholder="Add a new task" />
+    <button id="addTaskBtn">Add Task</button>
+    <ul id="taskList"></ul>
+
+    <script>
+        const addTaskBtn = document.getElementById("addTaskBtn");
+        const taskInput = document.getElementById("taskInput");
+        const taskList = document.getElementById("taskList");
+
+        addTaskBtn.addEventListener("click", () => {
+            // Get the input value
+            const taskText = taskInput.value;
+            if (taskText === "") return;
+
+            // Create a new list item
+            const listItem = document.createElement("li");
+            listItem.innerText = taskText;
+
+            // Add a "Remove" button
+            const removeBtn = document.createElement("button");
+            removeBtn.innerText = "Remove";
+            removeBtn.addEventListener("click", () => {
+                taskList.removeChild(listItem);
+            });
+
+            // Add the remove button to the list item
+            listItem.appendChild(removeBtn);
+
+            // Add the list item to the task list
+            taskList.appendChild(listItem);
+
+            // Clear the input
+            taskInput.value = "";
+        });
+    </script>
+</body>
+</html>
+```
+
+---
+
+## Wrapping Up
+
+In this part, we explored **DOM manipulation** and learned how to dynamically update web pages with JavaScript. By selecting elements, modifying them, and responding to events, you can create interactive experiences on your web pages.
+
+In Part 7, we’ll dive into **JavaScript events** in more depth and explore how to handle them effectively in complex applications. Keep practicing, and let your creativity shine! 🖌️
+
+Thanks for following along, and happy coding! 🎉

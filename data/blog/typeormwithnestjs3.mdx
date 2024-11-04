@@ -1,0 +1,135 @@
+---
+title: "Getting Started with Nest.js and TypeORM: Part 3"
+summary: "In the final part of our Nest.js and TypeORM tutorial, we create a controller to define endpoints for user data."
+date: "Nov 26 2024"
+tags: ["nestjs", "javascript", "web development"]
+draft: false
+---
+
+## Introduction
+
+Welcome to the third and final part of our series on **Nest.js** and **TypeORM**. In **Part 1**, we covered setting up TypeORM with a basic `User` entity, and in **Part 2**, we implemented a service to handle database operations for that entity. Now, in **Part 3**, we’ll bring it all together by creating a **controller** to define RESTful endpoints. This will allow us to interact with user data through HTTP requests, completing our simple CRUD API.
+
+## What is a Controller?
+
+In Nest.js, a controller is responsible for handling incoming requests, executing business logic (often by calling a service), and returning responses to the client. Controllers define routes that correspond to HTTP methods like GET, POST, PUT, and DELETE.
+
+### Step 1: Generate the Controller
+
+To create a new controller, you can use the Nest.js CLI:
+
+```bash
+nest generate controller user
+```
+
+This command will create a `user.controller.ts` file in the `user` directory with a `UserController` class and basic structure.
+
+### Step 2: Import the UserService
+
+The `UserController` will use the `UserService` to handle database interactions. Import the service in your `user.controller.ts` file and inject it via the constructor.
+
+```typescript
+// src/user/user.controller.ts
+import { Controller, Get, Post, Param, Body } from '@nestjs/common';
+import { UserService } from './user.service';
+import { User } from './user.entity';
+
+@Controller('users')
+export class UserController {
+  constructor(private readonly userService: UserService) {}
+
+  // Add route handlers here
+}
+```
+
+### Step 3: Define the Routes
+
+Now, let’s add route handlers for the basic CRUD operations: retrieving all users, retrieving a user by ID, and creating a new user.
+
+#### 1. Retrieve All Users
+
+This route will handle GET requests to `/users` and return all users.
+
+```typescript
+// src/user/user.controller.ts
+
+@Get()
+async findAll(): Promise<User[]> {
+  return await this.userService.findAll();
+}
+```
+
+#### 2. Retrieve a User by ID
+
+This route will handle GET requests to `/users/:id` to find a specific user by their `id`.
+
+```typescript
+// src/user/user.controller.ts
+
+@Get(':id')
+async findOne(@Param('id') id: number): Promise<User> {
+  return await this.userService.findOne(id);
+}
+```
+
+#### 3. Create a New User
+
+This route will handle POST requests to `/users` and create a new user.
+
+```typescript
+// src/user/user.controller.ts
+
+@Post()
+async create(@Body() userData: Partial<User>): Promise<User> {
+  return await this.userService.create(userData);
+}
+```
+
+### Explanation of Route Handlers
+
+- **@Get()**: Maps GET requests to a route. In `findAll()`, it retrieves all users, and in `findOne(id)`, it retrieves a user by ID.
+- **@Post()**: Maps POST requests to a route, allowing the creation of new data.
+- **@Param()**: Retrieves parameters from the URL (like the `id` in `findOne`).
+- **@Body()**: Retrieves data from the body of the request, as in `create`, where we pass in the user’s data.
+
+## Testing the Controller
+
+With these routes in place, we now have a simple CRUD API for the `User` entity. You can test these routes with a tool like **Postman** or **curl**.
+
+- **GET /users**: Retrieve all users.
+- **GET /users/:id**: Retrieve a user by ID.
+- **POST /users**: Create a new user by sending JSON data in the request body.
+
+Here’s an example of JSON data you might send in a POST request to create a new user:
+
+```json
+{
+  "username": "new_user",
+  "email": "new_user@example.com",
+  "age": 25
+}
+```
+
+## Final Project Structure
+
+After implementing the entity, service, and controller, your `user` module directory should look like this:
+
+```plaintext
+src/user/
+├── user.entity.ts         // Defines the User entity
+├── user.service.ts        // Handles database operations
+├── user.controller.ts     // Defines routes for the User API
+├── user.module.ts         // Registers the User module and its components
+```
+
+This structure keeps each part of the codebase organized, making it easy to scale and maintain.
+
+## Conclusion
+
+Congratulations! You've completed the basics of integrating **Nest.js** with **TypeORM** to build a simple CRUD API. In this series, we covered:
+
+1. **Entities and Attributes**: Setting up TypeORM and defining a User entity.
+2. **Services**: Creating a service to encapsulate business logic and handle database operations.
+3. **Controllers**: Defining endpoints for handling HTTP requests and interacting with our service.
+
+Nest.js and TypeORM provide a powerful combination for building server-side applications with a structured and scalable architecture. From here, you can extend this API by adding additional endpoints, validation, error handling, and authentication. Happy coding!

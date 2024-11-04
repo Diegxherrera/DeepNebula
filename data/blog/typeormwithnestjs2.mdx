@@ -1,0 +1,136 @@
+---
+title: "Getting Started with Nest.js and TypeORM: Part 2"
+summary: "Continuing our Nest.js and TypeORM tutorial, we cover creating a service to manage database operations."
+date: "Nov 25 2024"
+tags: ["nestjs", "javascript", "web development"]
+draft: false
+---
+
+## Introduction
+
+Welcome back to the second part of our series on **Nest.js** and **TypeORM**. In Part 1, we covered the basics of setting up TypeORM in a Nest.js application, including defining an entity to represent a database table. Now, we’ll expand on that foundation by creating a **service** to handle database operations for our `User` entity. Services in Nest.js are where you encapsulate the business logic and interact with the database, making it easier to keep your application organized and maintainable.
+
+## Creating a User Service
+
+A service in Nest.js is a class annotated with the `@Injectable()` decorator. This tells Nest.js that the service can be injected into other components, like controllers, to provide database or other operations.
+
+### Step 1: Generate the Service
+
+Nest.js provides a command-line tool that makes it easy to generate new components. To create a service, use the following command:
+
+```bash
+nest generate service user
+```
+
+This command will create a `user.service.ts` file in a `user` directory. It includes a class with the `@Injectable()` decorator.
+
+### Step 2: Import TypeORM Repository
+
+To interact with our `User` entity in the database, we need to use a **repository**. A repository in TypeORM is a layer that gives you access to various helper methods like `find`, `save`, and `delete` for handling database operations.
+
+In the `user.service.ts` file, import the `Repository` and `InjectRepository` from `@nestjs/typeorm` and inject the repository for the `User` entity.
+
+```typescript
+// src/user/user.service.ts
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { User } from './user.entity';
+
+@Injectable()
+export class UserService {
+  constructor(
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
+  ) {}
+
+  // Add methods here
+}
+```
+
+### Explanation
+
+- **@InjectRepository(User)**: This decorator injects the repository associated with the `User` entity.
+- **userRepository: Repository`<User>`**: The `userRepository` property now has access to all TypeORM repository methods for managing `User` data.
+
+## Implementing Service Methods
+
+Let’s add some common methods for managing users in the `UserService`. We’ll cover three basic operations:
+
+1. **Find All Users**
+2. **Find One User by ID**
+3. **Create a New User**
+
+### 1. Find All Users
+
+The `findAll()` method will retrieve all users from the database.
+
+```ts
+// src/user/user.service.ts
+
+async findAll(): Promise<User[]> {
+  return await this.userRepository.find();
+}
+```
+
+### 2. Find One User by ID
+
+The `findOne()` method will find a user by their unique `id`.
+
+```ts
+// src/user/user.service.ts
+
+async findOne(id: number): Promise<User> {
+  return await this.userRepository.findOne({ where: { id } });
+}
+```
+
+### 3. Create a New User
+
+The `create()` method will save a new user to the database.
+
+```typescript
+// src/user/user.service.ts
+
+async create(userData: Partial<User>): Promise<User> {
+  const newUser = this.userRepository.create(userData);
+  return await this.userRepository.save(newUser);
+}
+```
+
+### Explanation of the Methods
+
+- **findAll()**: Uses `userRepository.find()` to return all users.
+- **findOne(id: number)**: Uses `userRepository.findOne()` with a `where` clause to find a user by their ID.
+- **create(userData: Partial`<User>`)**: Creates and saves a new user. `userRepository.create()` prepares the user entity, and `save()` persists it in the database.
+
+## Adding the Service to a Module
+
+To use this service in our application, we need to add it to a module (in this case, our `AppModule` or a dedicated `UserModule`).
+
+```typescript
+// src/user/user.module.ts
+import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from './user.entity';
+import { UserService } from './user.service';
+
+@Module({
+  imports: [TypeOrmModule.forFeature([User])],
+  providers: [UserService],
+  exports: [UserService],
+})
+export class UserModule {}
+```
+
+### Explanation
+
+- **TypeOrmModule.forFeature(`[User]`)**: Registers the `User` entity in this module.
+- **providers**: Declares the `UserService` so it can be injected into other components.
+- **exports**: Exports the `UserService` so it can be used by other modules.
+
+## Conclusion
+
+In this part, we created a **service** to handle database operations for our `User` entity, and we added common methods to find and create users. We also set up the `UserModule`, making the service accessible to other parts of the application. In **Part 3**, we’ll create a **controller** to define API endpoints, allowing us to interact with the user data through HTTP requests.
+
+Stay tuned for Part 3, where we bring everything together with a controller to create a complete CRUD API for our `User` entity.

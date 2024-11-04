@@ -1,10 +1,18 @@
 {
-  "javascript-deep-dive": {
+  "sql-course": {
     "count": 3,
-    "title": "JavaScript Deep Dive"
+    "title": "SQL Course"
   },
   "javascript-crash-course": {
     "count": 10,
     "title": "JavaScript Crash Course"
+  },
+  "javascript-deep-dive": {
+    "count": 3,
+    "title": "JavaScript Deep Dive"
+  },
+  "typescript-crash-course": {
+    "count": 5,
+    "title": "TypeScript Crash Course"
   }
 }
