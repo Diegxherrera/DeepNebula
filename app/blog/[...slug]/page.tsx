@@ -113,6 +113,22 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      <script
+        src="https://giscus.app/client.js"
+        data-repo="diegxherrera/deepnebula"
+        data-repo-id="R_kgDONIJu5w"
+        data-category="General"
+        data-category-id="DIC_kwDONIJu584Cj-Zx"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="en"
+        crossOrigin="anonymous"
+        async
+      ></script>
       <Layout content={mainContent} authorDetails={authorDetails} next={next} prev={prev}>
         <MDXLayoutRenderer code={post.body.code} components={components} toc={post.toc} />
       </Layout>
