@@ -51,7 +51,11 @@ export default async function TagPage({ params }: { params: Promise<{ tag: strin
 
   // Filter posts based on the tag, excluding those with a course defined
   const filteredPosts = allCoreContent(
-    sortPosts(allBlogs.filter((post) => post.tags && post.tags.map((t) => slug(t)).includes(tag)))
+    sortPosts(
+      allBlogs.filter(
+        (post) => post.tags && post.tags.map((t) => slug(t)).includes(tag) && !post.course // Exclude course posts
+      )
+    )
   )
 
   if (filteredPosts.length === 0) {
