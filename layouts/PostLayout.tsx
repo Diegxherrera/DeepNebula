@@ -110,6 +110,38 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
                   <Comments slug={slug} />
                 </div>
               )}
+              <div className="flex items-center justify-between pt-8">
+                {/* Previous Part Button */}
+                <div>
+                  {prev?.path ? (
+                    <Link
+                      href={`/${prev.path}`}
+                      className="rounded bg-primary-500 px-4 py-2 text-white hover:bg-primary-600 dark:hover:bg-primary-400"
+                    >
+                      &larr; {`Previous Part`}
+                    </Link>
+                  ) : (
+                    <span className="px-4 py-2 text-gray-500 dark:text-gray-400">
+                      No part before
+                    </span>
+                  )}
+                </div>
+                {/* Next Part Button */}
+                <div>
+                  {next?.path ? (
+                    <Link
+                      href={`/${next.path}`}
+                      className="rounded bg-primary-500 px-4 py-2 text-white hover:bg-primary-600 dark:hover:bg-primary-400"
+                    >
+                      {`Next Part`} &rarr;
+                    </Link>
+                  ) : (
+                    <span className="px-4 py-2 text-gray-500 dark:text-gray-400">
+                      No part after
+                    </span>
+                  )}
+                </div>
+              </div>
             </div>
             <footer>
               <div className="divide-gray-200 text-sm font-medium leading-5 dark:divide-gray-700 xl:col-start-1 xl:row-start-2 xl:divide-y">
@@ -125,32 +157,8 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
                     </div>
                   </div>
                 )}
-                {(next || prev) && (
-                  <div className="flex justify-between py-4 xl:block xl:space-y-8 xl:py-8">
-                    {prev && prev.path && (
-                      <div>
-                        <h2 className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
-                          Previous Article
-                        </h2>
-                        <div className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400">
-                          <Link href={`/${prev.path}`}>{prev.title}</Link>
-                        </div>
-                      </div>
-                    )}
-                    {next && next.path && (
-                      <div>
-                        <h2 className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
-                          Next Article
-                        </h2>
-                        <div className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400">
-                          <Link href={`/${next.path}`}>{next.title}</Link>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )}
               </div>
-              <div className="pt-4 xl:pt-8">
+              <div className="pt-4 text-center">
                 <Link
                   href={`/${basePath}`}
                   className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
