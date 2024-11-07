@@ -1,0 +1,133 @@
+---
+title: "Part 8: Git Hooks and Customization"
+summary: "Learn how to leverage Git hooks and customize Git to automate workflows and enhance development processes."
+date: "Nov 28 2024"
+course: "Git & GitHub Course"
+tags: []
+draft: false
+---
+
+### Introduction
+Git hooks are scripts that run automatically when certain events occur in your Git workflow. They are useful for automating tasks, enforcing coding standards, and integrating with external tools. Customizing Git with hooks can improve your development process and ensure consistency across your team.
+
+### 1. What Are Git Hooks?
+Git hooks are local scripts triggered by specific Git events, such as committing changes, pushing to a repository, or merging branches. They are located in the `.git/hooks` directory of a repository and can be either client-side or server-side:
+- **Client-side hooks**: Run on operations like committing and merging.
+- **Server-side hooks**: Run on server operations like receiving pushed commits.
+
+### 2. Common Git Hooks and Their Uses
+
+#### Pre-commit Hook
+Runs before a commit is created. It’s often used to:
+- Check code formatting.
+- Run tests or linters.
+- Prevent certain files from being committed.
+
+Example pre-commit hook (`.git/hooks/pre-commit`):
+```bash
+#!/bin/bash
+# Run a linter before committing
+npm run lint
+
+# Exit with a non-zero status to cancel the commit if linting fails
+if [ $? -ne 0 ]; then
+  echo "Linting failed. Commit aborted."
+  exit 1
+fi
+```
+Make sure the script is executable:
+```bash
+$ chmod +x .git/hooks/pre-commit
+```
+
+#### Commit-msg Hook
+Checks the commit message for a specific format or convention. This is useful for enforcing team standards for commit messages.
+
+Example commit-msg hook:
+```bash
+#!/bin/bash
+# Check if the commit message follows a pattern
+MESSAGE=$(cat $1)
+
+if ! [[ $MESSAGE =~ ^\[JIRA-[0-9]+\]: ]]; then
+  echo "Commit message must start with '[JIRA-XXXX]:'"
+  exit 1
+fi
+```
+
+#### Pre-push Hook
+Runs before `git push` is executed. It can be used to:
+- Run tests to ensure that code is not pushed with errors.
+- Validate branch names.
+
+### 3. Creating and Managing Git Hooks
+To create a Git hook:
+1. Navigate to the `.git/hooks` directory.
+2. Create or edit the hook file (e.g., `pre-commit`, `commit-msg`).
+3. Ensure the file is executable.
+
+### 4. Sharing Git Hooks Across a Team
+Git hooks are not shared by default. To distribute hooks across a team, consider these approaches:
+- **Include hooks in the repository**: Place hooks in a directory like `scripts/hooks/` and use a script to copy them to `.git/hooks`.
+- **Use a tool like Husky** for JavaScript projects. Husky integrates hooks with your project’s `package.json` and runs them using Node.js.
+
+### Example: Setting Up Husky
+```bash
+# Install Husky
+$ npm install husky --save-dev
+
+# Enable Git hooks
+$ npx husky install
+
+# Add a pre-commit hook
+$ npx husky add .husky/pre-commit "npm run lint"
+```
+This setup runs `npm run lint` before each commit.
+
+### 5. Customizing Git Configuration
+Git can be customized using configuration files located at different levels:
+- **System-level (`/etc/gitconfig`)**: Applies to all users on the system.
+- **Global-level (`~/.gitconfig`)**: Applies to the current user.
+- **Repository-level (`.git/config`)**: Applies to the specific repository.
+
+#### Useful Git Config Customizations
+```bash
+# Set a default text editor for Git
+$ git config --global core.editor "code --wait"
+
+# Enable colored output for better readability
+$ git config --global color.ui auto
+
+# Create an alias for common commands
+$ git config --global alias.st status
+$ git config --global alias.co checkout
+```
+
+### 6. Practical Example: Pre-commit Hook for Code Formatting
+1. **Create a `pre-commit` hook** to run `Prettier` before committing:
+```bash
+#!/bin/bash
+npx prettier --check "src/**/*.{js,jsx,ts,tsx}"
+
+if [ $? -ne 0 ]; then
+  echo "Code formatting issues found. Please run 'npx prettier --write' to fix them."
+  exit 1
+fi
+   ```
+2. **Make the script executable**:
+```bash
+$ chmod +x .git/hooks/pre-commit
+   ```
+
+### Recap
+- **Git hooks** automate tasks in your development workflow.
+- **Pre-commit, commit-msg, and pre-push hooks** can be used for code checks, message validation, and more.
+- **Husky** helps integrate hooks into projects easily.
+- **Custom Git configurations** improve workflow efficiency with aliases and color settings.
+
+### Next Steps
+In the next part, we’ll cover **Rewriting History with Git**, including `git rebase`, `git cherry-pick`, and `git filter-branch`, to refine and edit commit history.
+
+---
+
+Stay tuned for Part 9: "Rewriting History with Git."

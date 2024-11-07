@@ -1,0 +1,123 @@
+---
+title: "Part 2: Branching and Merging"
+summary: "A comprehensive guide to understanding branching and merging in Git, and how these features can be leveraged to manage parallel development effectively."
+date: "Nov 8 2024"
+course: "Git & GitHub Course"
+tags: []
+draft: false
+---
+
+### Understanding Branching
+Branching is one of the most powerful features of Git and is crucial for modern development workflows. A branch in Git represents an independent line of development. By default, Git creates a branch called `main` (or `master` in older versions), which serves as the primary branch.
+
+Branches enable developers to:
+- Work on new features or bug fixes in isolation.
+- Experiment without affecting the main codebase.
+- Collaborate on different features simultaneously.
+
+### Why Use Branches?
+Using branches ensures that the `main` branch remains stable and deployable. Developers can create separate branches to develop features, fix bugs, or test new ideas. Once the changes are complete and tested, the branch can be merged back into `main`.
+
+### Creating a Branch
+Creating a new branch in Git is straightforward. The following command creates a new branch and switches to it:
+
+```bash
+# Create a new branch
+$ git branch feature-branch
+
+# Switch to the new branch
+$ git checkout feature-branch
+```
+
+You can combine these steps using:
+```bash
+$ git checkout -b feature-branch
+```
+
+### Listing Branches
+To see all branches in your repository:
+```bash
+$ git branch
+```
+The current branch is marked with an asterisk (*).
+
+### Working with Branches
+Once on a branch, any changes you make will be isolated to that branch until you decide to merge it with another branch.
+
+1. **Modify or create files** as needed.
+2. **Stage and commit changes**:
+```bash
+$ git add .
+$ git commit -m "Add new feature implementation"
+   ```
+
+### Merging Branches
+After you have completed your work on a branch, you’ll want to merge it back into the main branch. This can be done using:
+
+1. **Switch to the main branch**:
+```bash
+$ git checkout main
+   ```
+
+2. **Merge the feature branch**:
+```bash
+$ git merge feature-branch
+   ```
+
+### Handling Merge Conflicts
+Merge conflicts occur when changes in two branches overlap, and Git is unable to automatically resolve them. Here’s how to handle them:
+
+1. **Identify the conflict** by running:
+```bash
+$ git status
+   ```
+
+2. **Edit the conflicted file(s)** to manually resolve the conflicts.
+3. **Mark the conflict as resolved**:
+```bash
+$ git add resolved-file.txt
+   ```
+4. **Complete the merge**:
+```bash
+$ git commit
+   ```
+
+### Deleting a Branch
+Once a branch is merged and no longer needed, you can delete it:
+```bash
+$ git branch -d feature-branch
+```
+If the branch has not been merged and you still want to delete it, use:
+```bash
+$ git branch -D feature-branch
+```
+
+### Practical Example: Feature Branch Workflow
+```bash
+# Create and switch to a new branch
+$ git checkout -b add-login-feature
+
+# Make changes and commit them
+$ git add login-module.js
+$ git commit -m "Implement login feature"
+
+# Switch back to main and merge
+$ git checkout main
+$ git merge add-login-feature
+
+# Delete the feature branch
+$ git branch -d add-login-feature
+```
+
+### Recap
+- **Branches** are essential for parallel development.
+- **Merging** incorporates changes from one branch into another.
+- **Merge conflicts** require manual resolution when automatic merging fails.
+- **Deleting branches** helps keep your repository clean and organized.
+
+### Next Steps
+In the next part, we’ll explore **Collaboration with GitHub**, where we’ll discuss how to push branches to remote repositories, create pull requests, and collaborate with others.
+
+---
+
+Stay tuned for Part 3: "Collaboration with GitHub."

@@ -1,0 +1,137 @@
+---
+title: "Part 4: Advanced Git Techniques"
+summary: "Explore advanced Git techniques like rebase, cherry-pick, stashing, and more to enhance your workflow and manage complex version control scenarios."
+date: "Nov 14 2024"
+course: "Git & GitHub Course"
+tags: []
+draft: false
+---
+
+### Introduction
+While the basic Git commands are sufficient for most version control tasks, there are several advanced techniques that can help you manage more complex scenarios. These techniques include rebasing, cherry-picking, stashing, and more. Mastering these can enhance your productivity and keep your repository clean.
+
+### Git Rebase
+Rebasing is an alternative to merging that allows you to integrate changes from one branch into another by moving or combining a sequence of commits. It provides a cleaner project history by creating a linear path.
+
+#### How to Rebase a Branch
+```bash
+# Switch to the branch you want to rebase
+$ git checkout feature-branch
+
+# Rebase onto the target branch (e.g., main)
+$ git rebase main
+```
+This reapplies the commits from `feature-branch` on top of the latest commit in `main`.
+
+#### Interactive Rebase
+Interactive rebase (`git rebase -i`) allows you to modify commit history, including reordering, squashing, or editing commits.
+```bash
+$ git rebase -i HEAD~3
+```
+This command opens an editor where you can:
+- **Pick**: Keep the commit as is.
+- **Reword**: Change the commit message.
+- **Squash**: Combine this commit with the previous one.
+- **Drop**: Remove the commit.
+
+### Git Cherry-Pick
+Cherry-picking is the process of applying a specific commit from one branch to another. This is useful for selectively transferring changes.
+
+#### How to Cherry-Pick a Commit
+```bash
+# Identify the commit hash you want to cherry-pick
+$ git log --oneline
+
+# Apply the commit to your current branch
+$ git cherry-pick <commit-hash>
+```
+This command copies the changes from the specified commit to your current branch.
+
+### Git Stash
+Stashing allows you to temporarily save changes that you aren’t ready to commit. This is useful when you need to switch branches but don’t want to commit unfinished work.
+
+#### Stashing Changes
+```bash
+# Save changes to a stash
+$ git stash
+```
+This stores your changes and reverts your working directory to the last commit.
+
+#### Applying Stashed Changes
+```bash
+# Apply the latest stash
+$ git stash apply
+```
+To apply a specific stash:
+```bash
+$ git stash list
+$ git stash apply stash@{1}
+```
+
+#### Dropping a Stash
+```bash
+# Remove the latest stash
+$ git stash drop
+```
+
+### Git Reset
+The `git reset` command is used to undo changes by resetting the current branch to a specific state.
+
+#### Types of Git Reset
+- **Soft Reset**: Keeps changes in the working directory.
+```bash
+$ git reset --soft HEAD~1
+  ```
+- **Mixed Reset**: Keeps changes in the working directory but unstages them.
+```bash
+$ git reset --mixed HEAD~1
+  ```
+- **Hard Reset**: Discards all changes and resets the working directory.
+```bash
+$ git reset --hard HEAD~1
+  ```
+
+### Git Clean
+`git clean` is used to remove untracked files from your working directory.
+
+#### How to Clean Your Working Directory
+```bash
+# Preview untracked files to be removed
+$ git clean -n
+
+# Remove untracked files
+$ git clean -f
+```
+
+### Practical Example: Combining Techniques
+Suppose you are working on a feature and realize you need to update it with recent changes from `main`, rebase it, and then cherry-pick an additional commit.
+
+1. **Rebase your branch**:
+```bash
+$ git checkout feature-branch
+$ git rebase main
+   ```
+2. **Resolve any merge conflicts** during the rebase.
+3. **Cherry-pick a specific commit**:
+```bash
+$ git cherry-pick <commit-hash>
+   ```
+4. **Stash changes** if you need to switch to another branch:
+```bash
+$ git stash
+$ git checkout other-branch
+   ```
+
+### Recap
+- **Rebase** for a cleaner commit history.
+- **Cherry-pick** to apply specific changes from another branch.
+- **Stash** to save work temporarily.
+- **Reset** to undo changes effectively.
+- **Clean** to remove untracked files.
+
+### Next Steps
+In the next part, we’ll cover **Best Practices for Managing Git Repositories**, including commit message conventions, branch naming strategies, and repository structure.
+
+---
+
+Stay tuned for Part 5: "Best Practices for Managing Git Repositories."

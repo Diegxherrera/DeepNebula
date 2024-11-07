@@ -1,0 +1,186 @@
+---
+title: "Part 1: Introduction"
+summary: "A comprehensive guide to understanding Git, version control systems, and why they are essential for developers."
+date: "Nov 7 2024"
+course: "Git & GitHub Course"
+tags: []
+draft: false
+---
+
+### What is Version Control?
+Version control is a system that helps developers manage changes to source code over time. It allows multiple developers to collaborate on a project, maintain a history of changes, and revert to previous versions if necessary.
+
+Imagine working on a project with several collaborators—each making edits, fixing bugs, and adding features. Without a version control system, managing these changes would be chaotic and prone to errors. This is where **Git** steps in.
+
+Version control systems (VCS) can be categorized into two main types:
+- **Centralized Version Control Systems (CVCS)**: These systems, such as Subversion (SVN) and Perforce, use a central server to store all versions of the project. Developers need to connect to this server to make changes or view history.
+- **Distributed Version Control Systems (DVCS)**: Git is a prime example of DVCS. In this model, every developer has a complete copy of the project repository, including its full history. This enables offline work and greater collaboration flexibility.
+
+### Why Use Git?
+Git is one of the most popular distributed version control systems. Created by Linus Torvalds in 2005, it is powerful, fast, and reliable. Here are some key reasons to use Git:
+
+- **Distributed System**: Unlike CVCS, Git allows each developer to work independently and still have the complete history of the project.
+- **Branching and Merging**: Git supports non-linear development through branching. This makes it easy to create isolated branches for new features or bug fixes and merge them back into the main codebase when ready.
+- **Performance**: Git is designed to handle everything from small projects to large-scale projects efficiently.
+- **Security**: Git uses a SHA-1 hash function to identify and ensure the integrity of commits. This makes it difficult to tamper with historical data.
+- **Collaboration**: Git makes collaboration easy, especially when used with platforms like **GitHub**, **GitLab**, and **Bitbucket**.
+
+### Installing Git
+Before you start using Git, you need to install it on your local machine. Here’s how to do that for different operating systems:
+
+#### Windows
+1. Download the installer from [git-scm.com](https://git-scm.com/).
+2. Run the installer and follow the prompts.
+3. Open **Git Bash** to start using Git.
+
+#### macOS
+```bash
+$ brew install git
+```
+If you don’t have Homebrew installed, follow the instructions at [brew.sh](https://brew.sh/).
+
+#### Linux (Debian/Ubuntu)
+```bash
+$ sudo apt update
+$ sudo apt install git
+```
+
+### Initial Git Setup
+Once Git is installed, you need to configure it with your identity. This information is associated with the commits you make.
+
+```bash
+# Configure your username
+$ git config --global user.name "Your Name"
+
+# Configure your email
+$ git config --global user.email "your.email@example.com"
+```
+
+These commands set up your global Git configuration, stored in `~/.gitconfig`. If you need to override this configuration for specific repositories, you can run the same commands without the `--global` flag inside a repository.
+
+### Creating a Git Repository
+To start tracking your project with Git, navigate to your project directory and initialize a repository:
+
+```bash
+# Navigate to your project directory
+$ cd your-project-directory
+
+# Initialize Git
+$ git init
+```
+
+This command creates a hidden `.git` folder in your project, which contains all the metadata necessary for tracking changes.
+
+### Basic Git Workflow
+Git follows a three-stage process:
+1. **Working Directory**: This is where you make changes to files.
+2. **Staging Area (Index)**: This is where you list changes that you want to include in your next commit.
+3. **Repository**: This is where Git permanently stores the committed changes.
+
+The basic workflow in Git involves:
+- **Making changes** to your project files.
+- **Staging your changes**.
+- **Committing your changes**.
+
+#### Example Workflow
+1. **Modify or create files in your project.**
+2. **Stage the changes:**
+```bash
+$ git add filename.txt  # Stage a specific file
+$ git add .             # Stage all changes
+   ```
+3. **Commit the changes with a meaningful message:**
+```bash
+$ git commit -m "Add new feature implementation"
+   ```
+
+### Viewing the Status of Your Repository
+Use the `git status` command to check the status of your working directory:
+
+```bash
+$ git status
+```
+
+This command will inform you about:
+- **Tracked files** that have changes staged for commit.
+- **Untracked files** that are not yet being tracked by Git.
+- **Modified files** that have changes but are not staged.
+
+### Inspecting Your Commit History
+To view the commit history of your project, use the following command:
+
+```bash
+$ git log
+```
+
+This command displays:
+- **Commit hash (SHA-1)**: A unique identifier for each commit.
+- **Author**: The name of the person who made the commit.
+- **Date**: When the commit was made.
+- **Commit message**: A brief description of what was changed.
+
+For a more concise log, you can use:
+```bash
+$ git log --oneline
+```
+This displays each commit on a single line with a shortened commit hash.
+
+### Undoing Changes
+Git provides several ways to undo changes, depending on your situation:
+
+- **Unstage a file**:
+```bash
+$ git reset filename.txt
+  ```
+This command removes the file from the staging area but keeps the changes in your working directory.
+
+- **Discard changes in a file**:
+```bash
+$ git checkout -- filename.txt
+  ```
+This reverts the file to the last committed state.
+
+- **Amend the last commit**:
+```bash
+$ git commit --amend -m "Updated commit message"
+  ```
+This changes the last commit, useful for updating the commit message or adding missed changes.
+
+### Git Workflow Strategies
+There are various workflows that teams use to maintain their codebase, such as:
+
+- **Feature Branch Workflow**: Developers create a new branch for each feature or bug fix.
+- **Gitflow Workflow**: A structured workflow involving `develop`, `feature`, `release`, and `hotfix` branches.
+- **Forking Workflow**: Commonly used in open-source projects, where contributors fork a repository, make changes, and submit a pull request.
+
+### Practical Example: Initializing and Committing to a Repository
+```bash
+# Create a new directory for your project
+$ mkdir my-git-project
+$ cd my-git-project
+
+# Initialize a Git repository
+$ git init
+
+# Create a new file
+$ echo "Hello, Git!" > hello.txt
+
+# Stage the file
+$ git add hello.txt
+
+# Commit the file
+$ git commit -m "Initial commit with hello.txt"
+```
+
+### Recap
+- **Version Control** helps you track and manage changes over time.
+- **Git** is a distributed version control system with robust branching and merging capabilities.
+- **Installing Git** and configuring it with your identity is essential for version control.
+- **Basic Git commands** include `git init`, `git add`, `git commit`, `git status`, `git log`, and ways to undo changes.
+
+### Next Steps
+In the next part, we’ll dive deeper into **Branching and Merging in Git**, where we explore how to create and manage branches to support parallel development.
+
+---
+
+Stay tuned for Part 2: "Branching and Merging in Git."
