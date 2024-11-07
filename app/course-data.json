@@ -3,20 +3,20 @@
     "count": 10,
     "title": "Git & GitHub Course"
   },
-  "typescript-crash-course": {
-    "count": 5,
-    "title": "TypeScript Crash Course"
-  },
-  "javascript-deep-dive": {
+  "sql-course": {
     "count": 3,
-    "title": "JavaScript Deep Dive"
+    "title": "SQL Course"
   },
   "javascript-crash-course": {
     "count": 10,
     "title": "JavaScript Crash Course"
   },
-  "sql-course": {
+  "javascript-deep-dive": {
     "count": 3,
-    "title": "SQL Course"
+    "title": "JavaScript Deep Dive"
+  },
+  "typescript-crash-course": {
+    "count": 5,
+    "title": "TypeScript Crash Course"
   }
 }
