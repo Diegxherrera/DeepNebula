@@ -37,7 +37,7 @@ const coursesData: Course[] = [
   {
     title: 'Git & GitHub Course',
     description:
-      'Master the fundamentals of SQL with this comprehensive course. Learn how to query databases, manage data, and perform complex data operations to become proficient in SQL and enhance your data analysis skills.',
+      'Master Git and GitHub with this comprehensive course. Learn version control fundamentals, branch management, collaboration practices, and advanced techniques to streamline your development workflow and enhance team productivity.',
     imgSrc: `/static/images/git.svg`,
     href: '/courses/git--github-course',
   },
